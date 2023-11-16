@@ -23,7 +23,7 @@ public class Autor {
     this.criadoEm = LocalDateTime.now();
   }
 
-  private static void validaDadosEntrada(String nome, Email email, String descricao) {
+  private void validaDadosEntrada(String nome, Email email, String descricao) {
     if (isBlank(nome)) {
       throw new DomainException("O campo Nome deve ser preenchido.");
     }
