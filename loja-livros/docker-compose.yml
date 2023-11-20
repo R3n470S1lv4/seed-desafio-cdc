@@ -1,0 +1,17 @@
+version: '3.1'
+
+services:
+
+  product-db:
+    image: postgres
+    restart: always
+    container_name: livros-db
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_PASSWORD: 123
+      POSTGRES_USER: admin
+      POSTGRES_DB: livros-db
+    volumes:
+      - ./db:/var/lib/postgresql/data
+      - ./src/main/resources/db/migration/create-db.sql:/docker-entrypoint-initdb.d/create_database.sql
