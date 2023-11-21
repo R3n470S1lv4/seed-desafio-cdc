@@ -22,8 +22,9 @@ public class ValidaEmailExistente implements Validator {
   @Override
   public void validate(Object target, Errors errors) {
     AutorRequest autorRequest = (AutorRequest) target;
+
     autorRepository.findByEmailValue(autorRequest.email())
-        .ifPresent((email) -> errors.reject("email", null,
+        .ifPresent((email) -> errors.rejectValue("email", null,
             format("Já existe um autor com esse endereço de email: {0}.", email)));
 
   }

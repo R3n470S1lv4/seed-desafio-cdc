@@ -3,9 +3,9 @@ package com.deveficiente.lojalivros.domain.vo;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import com.deveficiente.lojalivros.domain.DomainException;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 import java.util.regex.Pattern;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import lombok.Getter;
 
 @Embeddable
