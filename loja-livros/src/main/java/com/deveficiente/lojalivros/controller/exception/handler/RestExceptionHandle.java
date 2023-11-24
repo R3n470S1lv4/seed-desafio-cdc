@@ -1,4 +1,4 @@
-package com.deveficiente.lojalivros.controller.exception.hadler;
+package com.deveficiente.lojalivros.controller.exception.handler;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 

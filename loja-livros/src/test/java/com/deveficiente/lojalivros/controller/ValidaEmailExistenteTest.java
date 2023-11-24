@@ -7,6 +7,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.deveficiente.lojalivros.controller.autor.NovoAutorRequest;
+import com.deveficiente.lojalivros.controller.autor.ValidaEmailExistente;
 import com.deveficiente.lojalivros.domain.Autor;
 import com.deveficiente.lojalivros.repository.AutorRepository;
 import java.util.Optional;
@@ -32,13 +34,13 @@ class ValidaEmailExistenteTest {
 
   @Test
   void deveRegistarDupliciadadeEmail() {
-    AutorRequest autorRequest = mock(AutorRequest.class);
-    when(autorRequest.getEmail()).thenReturn(MAIL);
+    NovoAutorRequest novoAutorRequest = mock(NovoAutorRequest.class);
+    when(novoAutorRequest.getEmail()).thenReturn(MAIL);
     Errors errors = mock(Errors.class);
 
     when(autorRepository.findByEmailValue(MAIL)).thenReturn(Optional.of(mock(Autor.class)));
 
-    validaEmailExistente.validate(autorRequest, errors);
+    validaEmailExistente.validate(novoAutorRequest, errors);
 
     verify(autorRepository).findByEmailValue(eq(MAIL));
     verify(errors).rejectValue(anyString(), any(), anyString());
@@ -46,13 +48,13 @@ class ValidaEmailExistenteTest {
 
   @Test
   void naoDeveRegistarDupliciadadeEmail() {
-    AutorRequest autorRequest = mock(AutorRequest.class);
-    when(autorRequest.getEmail()).thenReturn(MAIL);
+    NovoAutorRequest novoAutorRequest = mock(NovoAutorRequest.class);
+    when(novoAutorRequest.getEmail()).thenReturn(MAIL);
     Errors errors = mock(Errors.class);
 
     when(autorRepository.findByEmailValue(MAIL)).thenReturn(Optional.empty());
 
-    validaEmailExistente.validate(autorRequest, errors);
+    validaEmailExistente.validate(novoAutorRequest, errors);
 
     verify(autorRepository).findByEmailValue(eq(MAIL));
   }

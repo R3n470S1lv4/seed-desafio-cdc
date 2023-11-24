@@ -1,4 +1,4 @@
-package com.deveficiente.lojalivros.controller;
+package com.deveficiente.lojalivros.controller.autor;
 
 import com.deveficiente.lojalivros.domain.Autor;
 import com.deveficiente.lojalivros.repository.AutorRepository;
@@ -26,8 +26,8 @@ public class AutorController {
   }
 
   @PostMapping
-  public ResponseEntity<Void> cadastrar(@Validated @RequestBody AutorRequest autorRequest) {
-    Autor autor = autorRequest.to();
+  public ResponseEntity<Void> cadastrar(@Validated @RequestBody NovoAutorRequest novoAutorRequest) {
+    Autor autor = novoAutorRequest.to();
     autorRepository.save(autor);
     return ResponseEntity.ok().build();
   }

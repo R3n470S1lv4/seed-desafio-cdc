@@ -1,4 +1,4 @@
-package com.deveficiente.lojalivros.controller.exception.hadler;
+package com.deveficiente.lojalivros.controller.exception.handler;
 
 import static java.time.LocalDateTime.now;
 
@@ -10,7 +10,7 @@ public record ApiErrorDTO(
     LocalDateTime timestamp,
     int status,
     String error,
-    String Message,
+    String message,
     List<FieldErrorDTO> errors
 ) {
 

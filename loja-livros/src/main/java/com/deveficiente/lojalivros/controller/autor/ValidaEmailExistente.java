@@ -1,4 +1,4 @@
-package com.deveficiente.lojalivros.controller;
+package com.deveficiente.lojalivros.controller.autor;
 
 import static java.text.MessageFormat.format;
 
@@ -16,15 +16,15 @@ public class ValidaEmailExistente implements Validator {
 
   @Override
   public boolean supports(Class<?> clazz) {
-    return AutorRequest.class.isAssignableFrom(clazz);
+    return NovoAutorRequest.class.isAssignableFrom(clazz);
   }
 
   @Override
   public void validate(Object target, Errors errors) {
-    AutorRequest autorRequest = (AutorRequest) target;
+    NovoAutorRequest novoAutorRequest = (NovoAutorRequest) target;
 
-    autorRepository.findByEmailValue(autorRequest.getEmail())
-        .ifPresent((email) -> errors.rejectValue("email", null,
+    autorRepository.findByEmailValue(novoAutorRequest.getEmail())
+        .ifPresent(email -> errors.rejectValue("email", null,
             format("Já existe um autor com esse endereço de email: {0}.", email)));
 
   }
