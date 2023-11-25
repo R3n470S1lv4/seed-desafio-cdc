@@ -1,4 +1,4 @@
-package com.deveficiente.lojalivros.controller;
+package com.deveficiente.lojalivros.controller.autor;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -7,8 +7,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.deveficiente.lojalivros.controller.autor.NovoAutorRequest;
-import com.deveficiente.lojalivros.controller.autor.ValidaEmailExistente;
 import com.deveficiente.lojalivros.domain.Autor;
 import com.deveficiente.lojalivros.repository.AutorRepository;
 import java.util.Optional;
@@ -20,16 +18,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.validation.Errors;
 
 @ExtendWith(MockitoExtension.class)
-class ValidaEmailExistenteTest {
+class ValidaEmailAutorExistenteTest {
 
   public static final String MAIL = "renta@gmail.com";
   @Mock
   private AutorRepository autorRepository;
-  private ValidaEmailExistente validaEmailExistente;
+  private ValidaEmailAutorExistente validaEmailAutorExistente;
 
   @BeforeEach
   void setUp() {
-    validaEmailExistente = new ValidaEmailExistente(autorRepository);
+    validaEmailAutorExistente = new ValidaEmailAutorExistente(autorRepository);
   }
 
   @Test
@@ -40,10 +38,10 @@ class ValidaEmailExistenteTest {
 
     when(autorRepository.findByEmailValue(MAIL)).thenReturn(Optional.of(mock(Autor.class)));
 
-    validaEmailExistente.validate(novoAutorRequest, errors);
+    validaEmailAutorExistente.validate(novoAutorRequest, errors);
 
     verify(autorRepository).findByEmailValue(eq(MAIL));
-    verify(errors).rejectValue(anyString(), any(), anyString());
+    verify(errors).rejectValue(eq("email"), any(), anyString());
   }
 
   @Test
@@ -54,7 +52,7 @@ class ValidaEmailExistenteTest {
 
     when(autorRepository.findByEmailValue(MAIL)).thenReturn(Optional.empty());
 
-    validaEmailExistente.validate(novoAutorRequest, errors);
+    validaEmailAutorExistente.validate(novoAutorRequest, errors);
 
     verify(autorRepository).findByEmailValue(eq(MAIL));
   }

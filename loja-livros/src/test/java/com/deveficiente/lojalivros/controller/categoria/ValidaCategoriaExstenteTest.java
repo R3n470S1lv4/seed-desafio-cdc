@@ -30,34 +30,34 @@ class ValidaCategoriaExstenteTest {
   }
 
   @Test
-  void deveValidarCategoriaExistente() {
+  void deveValidarCategoriaQuandoCategoriaJaExistir() {
     String tecnologia = "tecnologia";
 
     when(categoriaRepository.findByNome(anyString())).thenReturn(
         Optional.of(mock(Categoria.class)));
 
     Errors errors = mock(Errors.class);
-    CategoriaRequest categoriaRequest = mock(CategoriaRequest.class);
-    when(categoriaRequest.getNome()).thenReturn(tecnologia);
+    NovaCategoriaRequest novaCategoriaRequest = mock(NovaCategoriaRequest.class);
+    when(novaCategoriaRequest.getNome()).thenReturn(tecnologia);
 
-    validaCategoriaExstente.validate(categoriaRequest, errors);
+    validaCategoriaExstente.validate(novaCategoriaRequest, errors);
 
     verify(categoriaRepository).findByNome(eq(tecnologia));
     verify(errors).rejectValue(eq("nome"), any(), anyString());
   }
 
   @Test
-  void naoDeveValidarCategoriaExistente() {
+  void naoDeveValidarCategoria() {
     String tecnologia = "tecnologia";
 
     when(categoriaRepository.findByNome(anyString())).thenReturn(
         Optional.empty());
 
     Errors errors = mock(Errors.class);
-    CategoriaRequest categoriaRequest = mock(CategoriaRequest.class);
-    when(categoriaRequest.getNome()).thenReturn(tecnologia);
+    NovaCategoriaRequest novaCategoriaRequest = mock(NovaCategoriaRequest.class);
+    when(novaCategoriaRequest.getNome()).thenReturn(tecnologia);
 
-    validaCategoriaExstente.validate(categoriaRequest, errors);
+    validaCategoriaExstente.validate(novaCategoriaRequest, errors);
 
     verify(categoriaRepository).findByNome(eq(tecnologia));
   }

@@ -16,16 +16,16 @@ public class ValidaCategoriaExstente implements Validator {
 
   @Override
   public boolean supports(Class<?> clazz) {
-    return CategoriaRequest.class.isAssignableFrom(clazz);
+    return NovaCategoriaRequest.class.isAssignableFrom(clazz);
   }
 
   @Override
   public void validate(Object target, Errors errors) {
-    CategoriaRequest categoriaRequest = (CategoriaRequest) target;
+    NovaCategoriaRequest novaCategoriaRequest = (NovaCategoriaRequest) target;
 
-    categoriaRepository.findByNome(categoriaRequest.getNome())
+    categoriaRepository.findByNome(novaCategoriaRequest.getNome())
         .ifPresent(categoria -> errors.rejectValue("nome", null,
-            format("Ja existe uma categoria cadastrada com o mesmo nome {0}.",
+            format("A categoria '{0}' já está cadastrada.",
                 categoria.getNome())));
 
   }

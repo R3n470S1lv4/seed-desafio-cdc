@@ -1,4 +1,4 @@
-CREATE TABLE  autor (
+CREATE TABLE  categoria (
 	id varchar(255) NOT NULL,
 	nome varchar(255) NOT NULL,
 	criado_em timestamp(6) NOT NULL,

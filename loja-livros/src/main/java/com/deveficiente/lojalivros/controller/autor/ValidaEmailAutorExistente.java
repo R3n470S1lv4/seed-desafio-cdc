@@ -10,7 +10,7 @@ import org.springframework.validation.Validator;
 
 @Component
 @RequiredArgsConstructor
-public class ValidaEmailExistente implements Validator {
+public class ValidaEmailAutorExistente implements Validator {
 
   private final AutorRepository autorRepository;
 

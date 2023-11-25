@@ -1,5 +1,8 @@
 package com.deveficiente.lojalivros.domain;
 
+import static java.time.LocalDateTime.now;
+
+import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,6 +18,7 @@ public class Categoria {
   @Id
   private String id;
   private String nome;
+  private LocalDateTime criadoEm;
 
   @Deprecated
   private Categoria() {
@@ -26,5 +30,6 @@ public class Categoria {
     }
     this.id = UUID.randomUUID().toString();
     this.nome = nome;
+    this.criadoEm = now();
   }
 }
