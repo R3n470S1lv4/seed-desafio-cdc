@@ -34,8 +34,6 @@ class CategoriaControllerTest {
   private MockMvc mockMvc;
 
   @MockBean
-  private ValidaCategoriaExstente validaCategoriaExstente;
-  @MockBean
   private CategoriaRepository categoriaRepository;
 
   @InjectMocks
@@ -43,7 +41,6 @@ class CategoriaControllerTest {
 
   @BeforeEach
   void setUp() {
-    when(validaCategoriaExstente.supports(any())).thenReturn(true);
     when(categoriaRepository.save(any())).thenReturn(mock(Categoria.class));
   }
 
@@ -55,7 +52,6 @@ class CategoriaControllerTest {
             .content("{\"nome\":\"tecnologia\"}")
         )
         .andExpect(status().isOk());
-    verify(validaCategoriaExstente).validate(any(NovaCategoriaRequest.class), any());
     verify(categoriaRepository).save(any(Categoria.class));
   }
 
@@ -73,7 +69,6 @@ class CategoriaControllerTest {
         .andExpect(jsonPath("$.errors.[*].fieldName", containsInAnyOrder("nome")))
         .andExpect(jsonPath("$.errors.[*].message", containsInAnyOrder("must not be blank")));
 
-    verify(validaCategoriaExstente).validate(any(NovaCategoriaRequest.class), any());
     verify(categoriaRepository, never()).save(any(Categoria.class));
   }
 }

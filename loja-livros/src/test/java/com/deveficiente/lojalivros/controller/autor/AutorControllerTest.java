@@ -36,14 +36,11 @@ class AutorControllerTest {
   private MockMvc mockMvc;
   @MockBean
   private AutorRepository autorRepository;
-  @MockBean
-  private ValidaEmailAutorExistente validaEmailAutorExistente;
   @InjectMocks
   private AutorController autorController;
 
   @BeforeEach
   void setUp() {
-    when(validaEmailAutorExistente.supports(any())).thenReturn(true);
     when(autorRepository.save(any())).thenReturn(mock(Autor.class));
   }
 
@@ -57,7 +54,6 @@ class AutorControllerTest {
         )
         .andExpect(status().isOk());
 
-    verify(validaEmailAutorExistente).validate(any(NovoAutorRequest.class), any());
     verify(autorRepository).save(any(Autor.class));
   }
 
@@ -72,7 +68,6 @@ class AutorControllerTest {
         .andExpect(status().isBadRequest())
         .andExpect(content().json("{\"message\":\"O campo Email tem um formato invalido.\"}"));
 
-    verify(validaEmailAutorExistente).validate(any(NovoAutorRequest.class), any());
     verify(autorRepository, never()).save(any(Autor.class));
   }
 
@@ -91,7 +86,6 @@ class AutorControllerTest {
         .andExpect(jsonPath("$.errors.[*].fieldName", containsInAnyOrder("nome")))
         .andExpect(jsonPath("$.errors.[*].message", containsInAnyOrder("must not be blank")));
 
-    verify(validaEmailAutorExistente).validate(any(NovoAutorRequest.class), any());
     verify(autorRepository, never()).save(any(Autor.class));
   }
 

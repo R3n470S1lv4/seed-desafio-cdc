@@ -1,5 +1,6 @@
 package com.deveficiente.lojalivros.controller.autor;
 
+import com.deveficiente.lojalivros.controller.UniqueValue;
 import com.deveficiente.lojalivros.domain.Autor;
 import com.deveficiente.lojalivros.domain.vo.Email;
 import javax.validation.constraints.NotBlank;
@@ -12,6 +13,7 @@ public class NovoAutorRequest {
   @NotBlank
   private final String nome;
   @NotBlank
+  @UniqueValue(domainClass = Autor.class, fieldName = "email.value", message = "Já existe um autor com esse endereço de email: {0}.")
   private final String email;
   @NotBlank
   @Size(max = 400)
