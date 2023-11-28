@@ -3,7 +3,6 @@ package com.deveficiente.lojalivros.controller;
 import static java.text.MessageFormat.format;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.springframework.stereotype.Component;
@@ -13,9 +12,12 @@ public class UniqueValueValidator implements ConstraintValidator<UniqueValue, Ob
 
   private String fieldName;
   private Class<?> klass;
-  @PersistenceContext
-  private EntityManager entityManager;
   private String message;
+  private final EntityManager entityManager;
+
+  public UniqueValueValidator(EntityManager entityManager) {
+    this.entityManager = entityManager;
+  }
 
   @Override
   public void initialize(UniqueValue params) {
