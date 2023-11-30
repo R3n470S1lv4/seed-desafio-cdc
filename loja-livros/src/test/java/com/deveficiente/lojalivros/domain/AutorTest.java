@@ -2,6 +2,7 @@ package com.deveficiente.lojalivros.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.deveficiente.lojalivros.domain.exceptions.DomainException;
 import com.deveficiente.lojalivros.domain.vo.Email;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

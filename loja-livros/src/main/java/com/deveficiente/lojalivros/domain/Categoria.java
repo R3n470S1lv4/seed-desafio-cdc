@@ -2,20 +2,21 @@ package com.deveficiente.lojalivros.domain;
 
 import static java.time.LocalDateTime.now;
 
+import com.deveficiente.lojalivros.domain.exceptions.DomainException;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
-@Table(name = "Categoria")
 @Entity
 @Getter
 public class Categoria {
 
   @Id
+  @Column(name = "categoria_id")
   private String id;
   private String nome;
   private LocalDateTime criadoEm;

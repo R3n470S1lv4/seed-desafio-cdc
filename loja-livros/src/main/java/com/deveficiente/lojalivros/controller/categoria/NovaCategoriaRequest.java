@@ -1,6 +1,6 @@
 package com.deveficiente.lojalivros.controller.categoria;
 
-import com.deveficiente.lojalivros.controller.UniqueValue;
+import com.deveficiente.lojalivros.controller.annotations.UniqueValue;
 import com.deveficiente.lojalivros.domain.Categoria;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import javax.validation.constraints.NotBlank;

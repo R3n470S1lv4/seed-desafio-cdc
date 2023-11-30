@@ -2,7 +2,7 @@ package com.deveficiente.lojalivros.domain.vo;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-import com.deveficiente.lojalivros.domain.DomainException;
+import com.deveficiente.lojalivros.domain.exceptions.DomainException;
 import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

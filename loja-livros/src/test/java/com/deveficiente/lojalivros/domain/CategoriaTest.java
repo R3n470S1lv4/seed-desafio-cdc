@@ -3,6 +3,7 @@ package com.deveficiente.lojalivros.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.deveficiente.lojalivros.domain.exceptions.DomainException;
 import org.junit.jupiter.api.Test;
 
 class CategoriaTest {

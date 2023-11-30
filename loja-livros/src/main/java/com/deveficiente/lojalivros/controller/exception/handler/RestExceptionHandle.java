@@ -2,7 +2,7 @@ package com.deveficiente.lojalivros.controller.exception.handler;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
-import com.deveficiente.lojalivros.domain.DomainException;
+import com.deveficiente.lojalivros.domain.exceptions.DomainException;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

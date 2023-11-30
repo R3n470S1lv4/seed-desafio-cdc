@@ -1,6 +1,6 @@
 package com.deveficiente.lojalivros.controller.autor;
 
-import com.deveficiente.lojalivros.controller.UniqueValue;
+import com.deveficiente.lojalivros.controller.annotations.UniqueValue;
 import com.deveficiente.lojalivros.domain.Autor;
 import com.deveficiente.lojalivros.domain.vo.Email;
 import javax.validation.constraints.NotBlank;

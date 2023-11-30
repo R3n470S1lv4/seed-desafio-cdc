@@ -1,4 +1,4 @@
-package com.deveficiente.lojalivros.domain;
+package com.deveficiente.lojalivros.domain.exceptions;
 
 public class DomainException extends RuntimeException {
 

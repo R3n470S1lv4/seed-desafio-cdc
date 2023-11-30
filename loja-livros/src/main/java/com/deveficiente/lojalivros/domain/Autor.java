@@ -5,19 +5,21 @@ import static java.time.LocalDateTime.now;
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+import com.deveficiente.lojalivros.domain.exceptions.DomainException;
 import com.deveficiente.lojalivros.domain.vo.Email;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Table(name = "Autor")
+
 @Entity
 public class Autor {
 
   @Id
+  @Column(name = "autor_id")
   private String id;
   private String nome;
   @Embedded
@@ -30,7 +32,7 @@ public class Autor {
   }
 
   public Autor(String nome, Email email, String descricao) {
-    validaDadosEntrada(nome, email, descricao);
+    validaParametros(nome, email, descricao);
 
     this.id = UUID.randomUUID().toString();
     this.nome = nome;
@@ -39,7 +41,7 @@ public class Autor {
     this.criadoEm = now();
   }
 
-  private void validaDadosEntrada(String nome, Email email, String descricao) {
+  private void validaParametros(String nome, Email email, String descricao) {
     if (isBlank(nome)) {
       throw new DomainException("O campo Nome deve ser preenchido.");
     }
