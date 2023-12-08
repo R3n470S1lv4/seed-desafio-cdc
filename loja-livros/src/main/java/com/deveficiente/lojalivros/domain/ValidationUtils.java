@@ -20,7 +20,7 @@ public class ValidationUtils {
   }
 
   public static boolean isLengthGreaterThan(String value, int maxLength) {
-    return length(value) <= maxLength;
+    return length(value) > maxLength;
   }
 
   public static boolean isLengthLessThan(String value, int minLength) {

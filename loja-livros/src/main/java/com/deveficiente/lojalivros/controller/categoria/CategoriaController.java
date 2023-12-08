@@ -18,11 +18,11 @@ public class CategoriaController {
   private final CategoriaRepository categoriaRepository;
 
   @PostMapping
-  public ResponseEntity<Void> cadastrar(
+  public ResponseEntity<NovaCategoriaResponse> cadastrar(
       @Valid @RequestBody NovaCategoriaRequest novaCategoriaRequest) {
     Categoria categoria = novaCategoriaRequest.of();
-    categoriaRepository.save(categoria);
-    return ResponseEntity.ok().build();
+    Categoria savedCategoria = categoriaRepository.save(categoria);
+    return ResponseEntity.ok().body(NovaCategoriaResponse.of(savedCategoria));
   }
 
 }

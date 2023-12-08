@@ -14,24 +14,31 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
 @Getter
+@AllArgsConstructor
 public class Livro {
 
   @Id
+  @Column(name = "livro_id")
   private String id;
   private String isbn;
   private String titulo;
   private String resumo;
   private String sumario;
   private BigDecimal valor;
+  @Column(name = "numero_paginas")
   private int numeroPaginas;
+  @Column(name = "data_publicacao")
   private LocalDate dataPublicacao;
   @OneToOne
   @JoinColumn(name = "categoria_id")
@@ -45,15 +52,18 @@ public class Livro {
   private Livro() {
   }
 
-  public Livro(String isbn, String titulo, String resumo, BigDecimal valor, int numeroPaginas,
+  @Builder
+  public Livro(String isbn, String titulo, String resumo, String sumario, BigDecimal valor,
+      int numeroPaginas,
       Categoria categoria, Autor autor) {
 
-    validaParametros(isbn, titulo, resumo, valor, numeroPaginas, categoria, autor);
+    validaParametros(isbn, titulo, resumo, sumario, valor, numeroPaginas, categoria, autor);
 
     this.id = UUID.randomUUID().toString();
     this.isbn = isbn;
     this.titulo = titulo;
     this.resumo = resumo;
+    this.sumario = sumario;
     this.valor = valor;
     this.numeroPaginas = numeroPaginas;
     this.categoria = categoria;
@@ -61,7 +71,27 @@ public class Livro {
     this.criadoEm = now();
   }
 
-  private static void validaParametros(String isbn, String titulo, String resumo, BigDecimal valor,
+  public Livro(String id, String isbn, String titulo, String resumo, String sumario,
+      BigDecimal valor, int numeroPaginas, Categoria categoria, Autor autor,
+      LocalDate dataPublicacao) {
+
+    this(isbn, titulo, resumo, sumario, valor, numeroPaginas, categoria, autor);
+
+    if (dataPublicacao.isBefore(LocalDate.now()) || dataPublicacao.equals(LocalDate.now())) {
+      throw new MandatoryFieldException("dataPublicacao", "E deve ser posterior a data atual.");
+    }
+
+    this.dataPublicacao = dataPublicacao;
+    this.id = id;
+  }
+
+  public Livro updateDataPublicacao(LocalDate dataPublicacao) {
+    return new Livro(this.id, this.isbn, this.titulo, this.resumo, this.sumario, this.valor,
+        this.numeroPaginas, this.categoria, this.autor, dataPublicacao);
+  }
+
+  private static void validaParametros(String isbn, String titulo, String resumo, String sumario,
+      BigDecimal valor,
       int numeroPaginas, Categoria categoria, Autor autor) {
     if (isBlank(isbn)) {
       throw new MandatoryFieldException("ISBN");
@@ -71,6 +101,9 @@ public class Livro {
     }
     if (isLengthLessThan(resumo, 1) || isLengthGreaterThan(resumo, 500)) {
       throw new InvalidFieldLengthValueException("RESUMO", 500);
+    }
+    if (isBlank(sumario)) {
+      throw new MandatoryFieldException("SUMARIO");
     }
     if (isValueLessThan(valor, valueOf(20))) {
       throw new MandatoryFieldException("VALOR", "E o valor minimo é 20.");

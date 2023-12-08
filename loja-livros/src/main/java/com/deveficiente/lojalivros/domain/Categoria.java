@@ -2,7 +2,7 @@ package com.deveficiente.lojalivros.domain;
 
 import static java.time.LocalDateTime.now;
 
-import com.deveficiente.lojalivros.domain.exceptions.DomainException;
+import com.deveficiente.lojalivros.domain.exceptions.PreConditionException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -27,7 +27,7 @@ public class Categoria {
 
   public Categoria(String nome) {
     if (StringUtils.isBlank(nome)) {
-      throw new DomainException("O campo Nome deve ser preenchido.");
+      throw new PreConditionException("O campo Nome deve ser preenchido.");
     }
     this.id = UUID.randomUUID().toString();
     this.nome = nome;

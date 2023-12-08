@@ -2,7 +2,7 @@ package com.deveficiente.lojalivros.domain.vo;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-import com.deveficiente.lojalivros.domain.exceptions.DomainException;
+import com.deveficiente.lojalivros.domain.exceptions.PreConditionException;
 import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -25,10 +25,10 @@ public class Email {
 
   public Email(String value) {
     if (isBlank(value)) {
-      throw new DomainException("O campo Email deve ser preenchido.");
+      throw new PreConditionException("O campo Email deve ser preenchido.");
     }
     if (!Pattern.compile(REGEX).matcher(value).matches()) {
-      throw new DomainException("O campo Email tem um formato invalido.");
+      throw new PreConditionException("O campo Email tem um formato invalido.");
     }
 
     this.value = value;

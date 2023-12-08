@@ -1,12 +1,14 @@
 package com.deveficiente.lojalivros.domain;
 
 import static java.math.BigDecimal.valueOf;
+import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
-import com.deveficiente.lojalivros.domain.exceptions.DomainException;
+import com.deveficiente.lojalivros.domain.exceptions.PreConditionException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,16 +22,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class LivroTest {
 
-  public static final String RESUMO_COM_499_CHARS = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce faucibus augue a risus commodo eleifend. Pellentesque tincidunt laoreet diam vitae luctus. Aenean nulla justo, vestibulum ut leo eu, varius finibus lectus. In ac velit lectus. Aliquam tempor tempor dolor, sed facilisis velit posuere eget. Vestibulum facilisis felis nulla, a egestas eros luctus sed. Sed accumsan, mi vel posuere suscipit, ipsum nisi volutpat purus, tempus vulputate tellus libero vitae tellus. Aliquam auctor lectus in.";
-  public static final String RESUMO_COM_500_CHARS = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce faucibus augue a risus commodo eleifend. Pellentesque tincidunt laoreet diam vitae luctus. Aenean nulla justo, vestibulum ut leo eu, varius finibus lectus. In ac velit lectus. Aliquam tempor tempor dolor, sed facilisis velit posuere eget. Vestibulum facilisis felis nulla, a egestas eros luctus sed. Sed accumsan, mi vel posuere suscipit, ipsum nisi volutpat purus, tempus vulputate tellus libero vitae tellus. Aliquam auctor lectus in. x";
+  public static final String RESUMO_COM_501_CHARS = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce faucibus augue a risus commodo eleifend. Pellentesque tincidunt laoreet diam vitae luctus. Aenean nulla justo, vestibulum ut leo eu, varius finibus lectus. In ac velit lectus. Aliquam tempor tempor dolor, sed facilisis velit posuere eget. Vestibulum facilisis felis nulla, a egestas eros luctus sed. Sed accumsan, mi vel posuere suscipit, ipsum nisi volutpat purus, tempus vulputate tellus libero vitae tellus. Aliquam auctor lectus in. x";
+  public static final String RESUMO_COM_500_CHARS = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce faucibus augue a risus commodo eleifend. Pellentesque tincidunt laoreet diam vitae luctus. Aenean nulla justo, vestibulum ut leo eu, varius finibus lectus. In ac velit lectus. Aliquam tempor tempor dolor, sed facilisis velit posuere eget. Vestibulum facilisis felis nulla, a egestas eros luctus sed. Sed accumsan, mi vel posuere suscipit, ipsum nisi volutpat purus, tempus vulputate tellus libero vitae tellus. Aliquam auctor lectus in.";
 
   @ParameterizedTest
   @NullAndEmptySource()
   void deveValidarISBNObrigatorio(String isbn) {
     assertThatThrownBy(() ->
-        new Livro(null, "dummy", "dummy", new BigDecimal("23"), 100, mock(Categoria.class),
+        new Livro(null, "dummy", "dummy", "dummy", new BigDecimal("23"), 100, mock(Categoria.class),
             mock(Autor.class))
-    ).isInstanceOf(DomainException.class)
+    ).isInstanceOf(PreConditionException.class)
         .hasMessage("O campo ISBN deve ser preenchido.");
   }
 
@@ -37,20 +39,22 @@ class LivroTest {
   @NullAndEmptySource()
   void deveValidarTituloObrigatorio(String titulo) {
     assertThatThrownBy(() ->
-        new Livro("dummy", titulo, "dummy", new BigDecimal("23"), 100, mock(Categoria.class),
+        new Livro("dummy", titulo, "dummy", "dummy", new BigDecimal("23"), 100,
+            mock(Categoria.class),
             mock(Autor.class))
-    ).isInstanceOf(DomainException.class)
+    ).isInstanceOf(PreConditionException.class)
         .hasMessage("O campo TITULO deve ser preenchido.");
   }
 
   @ParameterizedTest
   @NullAndEmptySource()
-  @ValueSource(strings = RESUMO_COM_499_CHARS)
+  @ValueSource(strings = RESUMO_COM_501_CHARS)
   void deveValidarResumoObrigatorio(String resumo) {
     assertThatThrownBy(() ->
-        new Livro("dummy", "dummy", resumo, new BigDecimal("23"), 100, mock(Categoria.class),
+        new Livro("dummy", "dummy", resumo, "dummy", new BigDecimal("23"), 100,
+            mock(Categoria.class),
             mock(Autor.class))
-    ).isInstanceOf(DomainException.class)
+    ).isInstanceOf(PreConditionException.class)
         .hasMessage("O comprimento do campo RESUMO deve ser entre 1 e 500.");
   }
 
@@ -59,24 +63,26 @@ class LivroTest {
   @MethodSource("provideInvalidValuesForFieldValor")
   void deveValidarValorObrigatorio(BigDecimal valor) {
     assertThatThrownBy(() ->
-        new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, valor, 100, mock(Categoria.class),
+        new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", valor, 100,
+            mock(Categoria.class),
             mock(Autor.class))
-    ).isInstanceOf(DomainException.class)
+    ).isInstanceOf(PreConditionException.class)
         .hasMessage("O campo VALOR deve ser preenchido. E o valor minimo é 20.");
   }
 
   public static Stream<Arguments> provideInvalidValuesForFieldValor() {
-    return Stream.of(Arguments.of(valueOf(19)));
+    return Stream.of(Arguments.of(valueOf(19)),
+        Arguments.of(valueOf(15)), Arguments.of(valueOf(-1)), Arguments.of(valueOf(0)));
   }
 
   @ParameterizedTest
   @ValueSource(ints = {-1, 0, 10, 20, 99})
   void deveValidarNumeroPaginasObrigatorio(int numeroPaginas) {
     assertThatThrownBy(() ->
-        new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, valueOf(20), numeroPaginas,
+        new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", valueOf(20), numeroPaginas,
             mock(Categoria.class),
             mock(Autor.class))
-    ).isInstanceOf(DomainException.class)
+    ).isInstanceOf(PreConditionException.class)
         .hasMessage(
             "O campo NUMERO DE PAGINAS deve ser preenchido. E deve possuir no minimo 20 paginas.");
   }
@@ -84,10 +90,10 @@ class LivroTest {
   @Test
   void deveValidarCategoriaObrigatoria() {
     assertThatThrownBy(() ->
-        new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, valueOf(20), 100,
+        new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", valueOf(20), 100,
             null,
             mock(Autor.class))
-    ).isInstanceOf(DomainException.class)
+    ).isInstanceOf(PreConditionException.class)
         .hasMessage(
             "O campo CATEGORIA deve ser preenchido.");
   }
@@ -95,18 +101,18 @@ class LivroTest {
   @Test
   void deveValidarAutorObrigatoria() {
     assertThatThrownBy(() ->
-        new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, valueOf(20), 100,
+        new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", valueOf(20), 100,
             mock(Categoria.class),
             null)
-    ).isInstanceOf(DomainException.class)
+    ).isInstanceOf(PreConditionException.class)
         .hasMessage(
             "O campo Autor deve ser preenchido.");
   }
 
   @Test
   void deveCriarInstanciaComSucesso() {
-
-    Livro livro = new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, new BigDecimal("23"), 100,
+    Livro livro = new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", new BigDecimal("23"),
+        100,
         mock(Categoria.class),
         mock(Autor.class));
 
@@ -120,4 +126,66 @@ class LivroTest {
     assertThat(livro.getAutor()).isNotNull();
   }
 
+  @Test
+  void deveCriarInstanciaComSucessoComBuilder() {
+    Livro livro = Livro.builder()
+        .isbn("dummy")
+        .titulo("dummy")
+        .resumo(RESUMO_COM_500_CHARS)
+        .valor(valueOf(23))
+        .numeroPaginas(100)
+        .categoria(mock(Categoria.class))
+        .autor(mock(Autor.class))
+        .sumario("dummy")
+        .build();
+
+    assertThat(livro).isNotNull();
+    assertThat(livro.getIsbn()).isEqualTo("dummy");
+    assertThat(livro.getTitulo()).isEqualTo("dummy");
+    assertThat(livro.getResumo()).isEqualTo(RESUMO_COM_500_CHARS);
+    assertThat(livro.getValor()).isEqualTo(valueOf(23));
+    assertThat(livro.getNumeroPaginas()).isEqualTo(100);
+    assertThat(livro.getCategoria()).isNotNull();
+    assertThat(livro.getAutor()).isNotNull();
+  }
+
+  @Test
+  void deveAtulizarDtPublicao() {
+    Livro livro = new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", new BigDecimal("23"),
+        100,
+        mock(Categoria.class), mock(Autor.class));
+
+    LocalDate dataPublicacao = LocalDate.now().plusDays(1);
+    Livro livroUpdated = livro.updateDataPublicacao(dataPublicacao);
+
+    assertThat(livroUpdated).isNotNull();
+    assertThat(livroUpdated.getId()).isNotNull();
+    assertThat(livro.getId()).isEqualTo(livroUpdated.getId());
+    assertThat(livroUpdated.getIsbn()).isEqualTo("dummy");
+    assertThat(livroUpdated.getTitulo()).isEqualTo("dummy");
+    assertThat(livroUpdated.getResumo()).isEqualTo(RESUMO_COM_500_CHARS);
+    assertThat(livroUpdated.getValor()).isEqualTo(valueOf(23));
+    assertThat(livroUpdated.getNumeroPaginas()).isEqualTo(100);
+    assertThat(livroUpdated.getCategoria()).isNotNull();
+    assertThat(livroUpdated.getAutor()).isNotNull();
+    assertThat(livroUpdated.getDataPublicacao()).isNotNull().isEqualTo(dataPublicacao);
+  }
+
+  @ParameterizedTest
+  @MethodSource("provideDate")
+  void naoDeveAtulizarDtPublicao(LocalDate value) {
+    Livro livro = new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", new BigDecimal("23"),
+        100,
+        mock(Categoria.class), mock(Autor.class));
+
+    assertThatThrownBy(() -> livro.updateDataPublicacao(value)).isInstanceOf(
+        PreConditionException.class);
+  }
+
+  public static Stream<Arguments> provideDate() {
+    return Stream.of(
+        Arguments.of(now().minusDays(1)),
+        Arguments.of(now())
+    );
+  }
 }

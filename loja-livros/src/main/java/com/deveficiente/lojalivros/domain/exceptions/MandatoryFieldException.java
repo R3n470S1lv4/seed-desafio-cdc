@@ -2,7 +2,7 @@ package com.deveficiente.lojalivros.domain.exceptions;
 
 import static java.text.MessageFormat.format;
 
-public class MandatoryFieldException extends DomainException {
+public class MandatoryFieldException extends PreConditionException {
 
   public MandatoryFieldException(String fieldName) {
     super(format("O campo {0} deve ser preenchido.", fieldName));

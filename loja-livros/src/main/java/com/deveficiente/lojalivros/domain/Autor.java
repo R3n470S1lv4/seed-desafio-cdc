@@ -5,7 +5,7 @@ import static java.time.LocalDateTime.now;
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-import com.deveficiente.lojalivros.domain.exceptions.DomainException;
+import com.deveficiente.lojalivros.domain.exceptions.PreConditionException;
 import com.deveficiente.lojalivros.domain.vo.Email;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -13,9 +13,11 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import lombok.Getter;
 
 
 @Entity
+@Getter
 public class Autor {
 
   @Id
@@ -43,16 +45,16 @@ public class Autor {
 
   private void validaParametros(String nome, Email email, String descricao) {
     if (isBlank(nome)) {
-      throw new DomainException("O campo Nome deve ser preenchido.");
+      throw new PreConditionException("O campo Nome deve ser preenchido.");
     }
     if (isBlank(descricao)) {
-      throw new DomainException("O campo Descricao deve ser preenchido.");
+      throw new PreConditionException("O campo Descricao deve ser preenchido.");
     }
     if (descricao.length() > 400) {
-      throw new DomainException("O campo Descricao nao pode passar de 400 caracteres.");
+      throw new PreConditionException("O campo Descricao nao pode passar de 400 caracteres.");
     }
     if (isNull(email)) {
-      throw new DomainException("O campo Email deve ser preenchido.");
+      throw new PreConditionException("O campo Email deve ser preenchido.");
     }
   }
 }

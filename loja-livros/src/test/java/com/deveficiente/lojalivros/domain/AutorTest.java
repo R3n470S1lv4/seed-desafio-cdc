@@ -2,7 +2,7 @@ package com.deveficiente.lojalivros.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.deveficiente.lojalivros.domain.exceptions.DomainException;
+import com.deveficiente.lojalivros.domain.exceptions.PreConditionException;
 import com.deveficiente.lojalivros.domain.vo.Email;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,7 +18,7 @@ class AutorTest {
   @ValueSource(strings = {" "})
   void deveValidarCampoNomeObrigatorio(String value) {
     assertThatThrownBy(() -> new Autor(value, null, null))
-        .isExactlyInstanceOf(DomainException.class)
+        .isExactlyInstanceOf(PreConditionException.class)
         .hasMessage("O campo Nome deve ser preenchido.");
   }
 
@@ -28,14 +28,14 @@ class AutorTest {
   @ValueSource(strings = {" "})
   void deveValidarCampoDescricaObrigatorio(String value) {
     assertThatThrownBy(() -> new Autor("Renato", null, value))
-        .isExactlyInstanceOf(DomainException.class)
+        .isExactlyInstanceOf(PreConditionException.class)
         .hasMessage("O campo Descricao deve ser preenchido.");
   }
 
   @Test
   void deveValidarCampoEmailObrigatorio() {
     assertThatThrownBy(() -> new Autor("Renato", null, "dummy dummy"))
-        .isExactlyInstanceOf(DomainException.class)
+        .isExactlyInstanceOf(PreConditionException.class)
         .hasMessage("O campo Email deve ser preenchido.");
   }
 
@@ -43,7 +43,7 @@ class AutorTest {
   void deveValidarLimteCampoDescricao() {
     assertThatThrownBy(
         () -> new Autor("Renato", new Email("renato@gmail.com"), DESCRICAO_COM_401_CHARS))
-        .isExactlyInstanceOf(DomainException.class)
+        .isExactlyInstanceOf(PreConditionException.class)
         .hasMessage("O campo Descricao nao pode passar de 400 caracteres.");
   }
 

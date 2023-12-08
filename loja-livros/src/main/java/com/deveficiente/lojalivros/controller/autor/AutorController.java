@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/autores")
@@ -18,10 +19,11 @@ public class AutorController {
   private final AutorRepository autorRepository;
 
   @PostMapping
-  public ResponseEntity<Void> cadastrar(@Valid @RequestBody NovoAutorRequest novoAutorRequest) {
+  public ResponseEntity<NovoAutorResponse> cadastrar(
+      @Valid @RequestBody NovoAutorRequest novoAutorRequest, UriComponentsBuilder uriBuilder) {
     Autor autor = novoAutorRequest.to();
-    autorRepository.save(autor);
-    return ResponseEntity.ok().build();
+    Autor savedAutor = autorRepository.save(autor);
+    return ResponseEntity.ok().body(NovoAutorResponse.of(savedAutor));
   }
 
 }

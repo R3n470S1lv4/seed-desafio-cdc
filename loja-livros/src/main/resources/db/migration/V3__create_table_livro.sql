@@ -8,7 +8,7 @@ CREATE TABLE  livro (
   numero_paginas int NOT NULL,
   categoria_id varchar(255) NOT NULL,
   autor_id varchar(255) NOT NULL,
-  dataPublicacao timestamp(6),
+  data_publicacao timestamp(6),
 	criado_em timestamp(6) NOT NULL,
 	CONSTRAINT categoria_pkey PRIMARY KEY (livro_id)
 );
