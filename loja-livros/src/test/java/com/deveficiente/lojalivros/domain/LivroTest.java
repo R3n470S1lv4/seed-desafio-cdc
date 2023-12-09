@@ -24,12 +24,14 @@ class LivroTest {
 
   public static final String RESUMO_COM_501_CHARS = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce faucibus augue a risus commodo eleifend. Pellentesque tincidunt laoreet diam vitae luctus. Aenean nulla justo, vestibulum ut leo eu, varius finibus lectus. In ac velit lectus. Aliquam tempor tempor dolor, sed facilisis velit posuere eget. Vestibulum facilisis felis nulla, a egestas eros luctus sed. Sed accumsan, mi vel posuere suscipit, ipsum nisi volutpat purus, tempus vulputate tellus libero vitae tellus. Aliquam auctor lectus in. x";
   public static final String RESUMO_COM_500_CHARS = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce faucibus augue a risus commodo eleifend. Pellentesque tincidunt laoreet diam vitae luctus. Aenean nulla justo, vestibulum ut leo eu, varius finibus lectus. In ac velit lectus. Aliquam tempor tempor dolor, sed facilisis velit posuere eget. Vestibulum facilisis felis nulla, a egestas eros luctus sed. Sed accumsan, mi vel posuere suscipit, ipsum nisi volutpat purus, tempus vulputate tellus libero vitae tellus. Aliquam auctor lectus in.";
+  public static final LocalDate DATA_PUBLICACAO_FUTURO = now().plusDays(1);
 
   @ParameterizedTest
   @NullAndEmptySource()
   void deveValidarISBNObrigatorio(String isbn) {
     assertThatThrownBy(() ->
-        new Livro(null, "dummy", "dummy", "dummy", new BigDecimal("23"), 100, mock(Categoria.class),
+        new Livro(null, "dummy", "dummy", "dummy", new BigDecimal("23"), 100, now(),
+            mock(Categoria.class),
             mock(Autor.class))
     ).isInstanceOf(PreConditionException.class)
         .hasMessage("O campo ISBN deve ser preenchido.");
@@ -39,7 +41,7 @@ class LivroTest {
   @NullAndEmptySource()
   void deveValidarTituloObrigatorio(String titulo) {
     assertThatThrownBy(() ->
-        new Livro("dummy", titulo, "dummy", "dummy", new BigDecimal("23"), 100,
+        new Livro("dummy", titulo, "dummy", "dummy", new BigDecimal("23"), 100, now(),
             mock(Categoria.class),
             mock(Autor.class))
     ).isInstanceOf(PreConditionException.class)
@@ -51,7 +53,7 @@ class LivroTest {
   @ValueSource(strings = RESUMO_COM_501_CHARS)
   void deveValidarResumoObrigatorio(String resumo) {
     assertThatThrownBy(() ->
-        new Livro("dummy", "dummy", resumo, "dummy", new BigDecimal("23"), 100,
+        new Livro("dummy", "dummy", resumo, "dummy", new BigDecimal("23"), 100, now(),
             mock(Categoria.class),
             mock(Autor.class))
     ).isInstanceOf(PreConditionException.class)
@@ -63,7 +65,7 @@ class LivroTest {
   @MethodSource("provideInvalidValuesForFieldValor")
   void deveValidarValorObrigatorio(BigDecimal valor) {
     assertThatThrownBy(() ->
-        new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", valor, 100,
+        new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", valor, 100, now(),
             mock(Categoria.class),
             mock(Autor.class))
     ).isInstanceOf(PreConditionException.class)
@@ -80,6 +82,7 @@ class LivroTest {
   void deveValidarNumeroPaginasObrigatorio(int numeroPaginas) {
     assertThatThrownBy(() ->
         new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", valueOf(20), numeroPaginas,
+            now(),
             mock(Categoria.class),
             mock(Autor.class))
     ).isInstanceOf(PreConditionException.class)
@@ -91,6 +94,7 @@ class LivroTest {
   void deveValidarCategoriaObrigatoria() {
     assertThatThrownBy(() ->
         new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", valueOf(20), 100,
+            DATA_PUBLICACAO_FUTURO,
             null,
             mock(Autor.class))
     ).isInstanceOf(PreConditionException.class)
@@ -102,6 +106,7 @@ class LivroTest {
   void deveValidarAutorObrigatoria() {
     assertThatThrownBy(() ->
         new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", valueOf(20), 100,
+            DATA_PUBLICACAO_FUTURO,
             mock(Categoria.class),
             null)
     ).isInstanceOf(PreConditionException.class)
@@ -111,8 +116,8 @@ class LivroTest {
 
   @Test
   void deveCriarInstanciaComSucesso() {
-    Livro livro = new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", new BigDecimal("23"),
-        100,
+    Livro livro = new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", valueOf(23),
+        100, DATA_PUBLICACAO_FUTURO,
         mock(Categoria.class),
         mock(Autor.class));
 
@@ -134,6 +139,7 @@ class LivroTest {
         .resumo(RESUMO_COM_500_CHARS)
         .valor(valueOf(23))
         .numeroPaginas(100)
+        .dataPublicacao(DATA_PUBLICACAO_FUTURO)
         .categoria(mock(Categoria.class))
         .autor(mock(Autor.class))
         .sumario("dummy")
@@ -149,36 +155,12 @@ class LivroTest {
     assertThat(livro.getAutor()).isNotNull();
   }
 
-  @Test
-  void deveAtulizarDtPublicao() {
-    Livro livro = new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", new BigDecimal("23"),
-        100,
-        mock(Categoria.class), mock(Autor.class));
-
-    LocalDate dataPublicacao = LocalDate.now().plusDays(1);
-    Livro livroUpdated = livro.updateDataPublicacao(dataPublicacao);
-
-    assertThat(livroUpdated).isNotNull();
-    assertThat(livroUpdated.getId()).isNotNull();
-    assertThat(livro.getId()).isEqualTo(livroUpdated.getId());
-    assertThat(livroUpdated.getIsbn()).isEqualTo("dummy");
-    assertThat(livroUpdated.getTitulo()).isEqualTo("dummy");
-    assertThat(livroUpdated.getResumo()).isEqualTo(RESUMO_COM_500_CHARS);
-    assertThat(livroUpdated.getValor()).isEqualTo(valueOf(23));
-    assertThat(livroUpdated.getNumeroPaginas()).isEqualTo(100);
-    assertThat(livroUpdated.getCategoria()).isNotNull();
-    assertThat(livroUpdated.getAutor()).isNotNull();
-    assertThat(livroUpdated.getDataPublicacao()).isNotNull().isEqualTo(dataPublicacao);
-  }
-
   @ParameterizedTest
   @MethodSource("provideDate")
   void naoDeveAtulizarDtPublicao(LocalDate value) {
-    Livro livro = new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", new BigDecimal("23"),
-        100,
-        mock(Categoria.class), mock(Autor.class));
-
-    assertThatThrownBy(() -> livro.updateDataPublicacao(value)).isInstanceOf(
+    assertThatThrownBy(
+        () -> new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", new BigDecimal("23"),
+            100, value, mock(Categoria.class), mock(Autor.class))).isInstanceOf(
         PreConditionException.class);
   }
 

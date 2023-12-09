@@ -11,6 +11,7 @@ import com.deveficiente.lojalivros.repository.CategoriaRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -21,6 +22,7 @@ import org.hibernate.validator.constraints.Length;
 public class NovoLivroRequest {
 
   @NotBlank
+  @UniqueValue(fieldName = "isbn", domainClass = Livro.class, message = "Ja existe um livro cadastrado com o mesmo isbn: {0}")
   private String isbn;
   @NotBlank
   @UniqueValue(fieldName = "titulo", domainClass = Livro.class, message = "Ja existe um livro cadastrado com o mesmo titulo: {0}")
@@ -30,10 +32,13 @@ public class NovoLivroRequest {
   private String resumo;
   private String sumario;
   @DecimalMin("20")
+  @NotNull
   private BigDecimal valor;
   @NotNull
   @Min(100)
   private Integer numeroPaginas;
+  @Future
+  @NotNull
   private LocalDate dataPublicacao;
   @NotBlank
   @EntityExists(fieldName = "categoriaId", domainClass = Categoria.class, message = "Categoria nao encontrada com o id informado: {0}")
@@ -51,6 +56,7 @@ public class NovoLivroRequest {
         .orElseThrow(() -> new PreConditionException(
             "Categoria {0} nao encontrada.", autorId));
 
-    return new Livro(isbn, titulo, resumo, sumario, valor, numeroPaginas, categoria, autor);
+    return new Livro(isbn, titulo, resumo, sumario, valor, numeroPaginas, dataPublicacao, categoria,
+        autor);
   }
 }

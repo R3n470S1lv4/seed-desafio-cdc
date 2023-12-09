@@ -28,16 +28,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 
-@WebMvcTest(AutorController.class)
+@WebMvcTest(NovoAutorController.class)
 @ExtendWith(MockitoExtension.class)
-class AutorControllerTest {
+class NovoAutorControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
   @MockBean
   private AutorRepository autorRepository;
   @InjectMocks
-  private AutorController autorController;
+  private NovoAutorController novoAutorController;
 
   @BeforeEach
   void setUp() {

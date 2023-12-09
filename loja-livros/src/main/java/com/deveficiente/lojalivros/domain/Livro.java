@@ -54,10 +54,10 @@ public class Livro {
 
   @Builder
   public Livro(String isbn, String titulo, String resumo, String sumario, BigDecimal valor,
-      int numeroPaginas,
-      Categoria categoria, Autor autor) {
+      int numeroPaginas, LocalDate dataPublicacao, Categoria categoria, Autor autor) {
 
-    validaParametros(isbn, titulo, resumo, sumario, valor, numeroPaginas, categoria, autor);
+    validaParametros(isbn, titulo, resumo, sumario, valor, numeroPaginas, dataPublicacao, categoria,
+        autor);
 
     this.id = UUID.randomUUID().toString();
     this.isbn = isbn;
@@ -66,33 +66,23 @@ public class Livro {
     this.sumario = sumario;
     this.valor = valor;
     this.numeroPaginas = numeroPaginas;
+    this.dataPublicacao = dataPublicacao;
     this.categoria = categoria;
     this.autor = autor;
     this.criadoEm = now();
   }
 
   public Livro(String id, String isbn, String titulo, String resumo, String sumario,
-      BigDecimal valor, int numeroPaginas, Categoria categoria, Autor autor,
-      LocalDate dataPublicacao) {
-
-    this(isbn, titulo, resumo, sumario, valor, numeroPaginas, categoria, autor);
-
-    if (dataPublicacao.isBefore(LocalDate.now()) || dataPublicacao.equals(LocalDate.now())) {
-      throw new MandatoryFieldException("dataPublicacao", "E deve ser posterior a data atual.");
-    }
-
-    this.dataPublicacao = dataPublicacao;
+      BigDecimal valor, int numeroPaginas, LocalDate dataPublicacao, Categoria categoria,
+      Autor autor
+  ) {
+    this(isbn, titulo, resumo, sumario, valor, numeroPaginas, dataPublicacao, categoria, autor);
     this.id = id;
   }
 
-  public Livro updateDataPublicacao(LocalDate dataPublicacao) {
-    return new Livro(this.id, this.isbn, this.titulo, this.resumo, this.sumario, this.valor,
-        this.numeroPaginas, this.categoria, this.autor, dataPublicacao);
-  }
-
   private static void validaParametros(String isbn, String titulo, String resumo, String sumario,
-      BigDecimal valor,
-      int numeroPaginas, Categoria categoria, Autor autor) {
+      BigDecimal valor, int numeroPaginas, LocalDate dataPublicacao, Categoria categoria,
+      Autor autor) {
     if (isBlank(isbn)) {
       throw new MandatoryFieldException("ISBN");
     }
@@ -111,6 +101,9 @@ public class Livro {
     if (isValueLessThan(numeroPaginas, 100)) {
       throw new MandatoryFieldException("NUMERO DE PAGINAS",
           "E deve possuir no minimo 20 paginas.");
+    }
+    if (dataPublicacao.isBefore(LocalDate.now()) || dataPublicacao.equals(LocalDate.now())) {
+      throw new MandatoryFieldException("dataPublicacao", "E deve ser posterior a data atual.");
     }
     if (isNull(categoria)) {
       throw new MandatoryFieldException("CATEGORIA");

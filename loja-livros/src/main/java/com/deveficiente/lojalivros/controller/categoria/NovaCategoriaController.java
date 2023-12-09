@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/categorias")
 @RequiredArgsConstructor
-public class CategoriaController {
+public class NovaCategoriaController {
 
   private final CategoriaRepository categoriaRepository;
 

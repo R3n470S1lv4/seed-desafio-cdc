@@ -26,7 +26,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(CategoriaController.class)
+@WebMvcTest(NovaCategoriaController.class)
 @ExtendWith(MockitoExtension.class)
 class CategoriaControllerTest {
 
@@ -37,7 +37,7 @@ class CategoriaControllerTest {
   private CategoriaRepository categoriaRepository;
 
   @InjectMocks
-  private CategoriaController categoriaController;
+  private NovaCategoriaController categoriaController;
 
   @BeforeEach
   void setUp() {

@@ -14,7 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @RequestMapping("/autores")
 @RequiredArgsConstructor
-public class AutorController {
+public class NovoAutorController {
 
   private final AutorRepository autorRepository;
 

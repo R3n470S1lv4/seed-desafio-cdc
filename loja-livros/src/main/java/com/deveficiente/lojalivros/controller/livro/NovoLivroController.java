@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/livros")
 @RequiredArgsConstructor
-public class LivroController {
+public class NovoLivroController {
 
   private final LivroRepository livroRepository;
   private final AutorRepository autorRepository;
