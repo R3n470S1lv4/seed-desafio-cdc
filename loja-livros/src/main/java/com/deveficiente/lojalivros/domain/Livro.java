@@ -72,14 +72,6 @@ public class Livro {
     this.criadoEm = now();
   }
 
-  public Livro(String id, String isbn, String titulo, String resumo, String sumario,
-      BigDecimal valor, int numeroPaginas, LocalDate dataPublicacao, Categoria categoria,
-      Autor autor
-  ) {
-    this(isbn, titulo, resumo, sumario, valor, numeroPaginas, dataPublicacao, categoria, autor);
-    this.id = id;
-  }
-
   private static void validaParametros(String isbn, String titulo, String resumo, String sumario,
       BigDecimal valor, int numeroPaginas, LocalDate dataPublicacao, Categoria categoria,
       Autor autor) {
