@@ -29,6 +29,9 @@ public class Autor {
   private String descricao;
   private LocalDateTime criadoEm;
 
+  /**
+   * @deprecated Nao use esse construtor, ele so existe por causa do ORM
+   */
   @Deprecated
   private Autor() {
   }

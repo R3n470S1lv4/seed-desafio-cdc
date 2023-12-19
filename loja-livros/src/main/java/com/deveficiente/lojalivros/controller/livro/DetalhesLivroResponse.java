@@ -1,5 +1,6 @@
 package com.deveficiente.lojalivros.controller.livro;
 
+import com.deveficiente.lojalivros.domain.Autor;
 import com.deveficiente.lojalivros.domain.Livro;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,7 +15,7 @@ public class DetalhesLivroResponse {
 
   private final String titulo;
   private final BigDecimal valor;
-  private final String conteudo;
+  private final String resumo;
   private final String sumario;
   private final int numeroPaginas;
   private final String isbn;
@@ -25,14 +26,12 @@ public class DetalhesLivroResponse {
     return DetalhesLivroResponse.builder()
         .titulo(livro.getTitulo())
         .valor(livro.getValor())
-        .conteudo(livro.getResumo())
+        .resumo(livro.getResumo())
         .sumario(livro.getSumario())
         .numeroPaginas(livro.getNumeroPaginas())
         .isbn(livro.getIsbn())
         .dataPublicacao(livro.getDataPublicacao())
-        .autor(
-            new AutorResponse(livro.getAutor().getNome(), livro.getAutor().getDescricao())
-        )
+        .autor(AutorResponse.of(livro.getAutor()))
         .build();
   }
 
@@ -42,5 +41,9 @@ public class DetalhesLivroResponse {
 
     private final String nome;
     private final String descricao;
+
+    public static AutorResponse of(Autor autor) {
+      return new AutorResponse(autor.getNome(), autor.getDescricao());
+    }
   }
 }

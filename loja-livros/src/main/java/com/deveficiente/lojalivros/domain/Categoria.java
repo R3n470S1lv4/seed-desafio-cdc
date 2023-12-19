@@ -21,6 +21,9 @@ public class Categoria {
   private String nome;
   private LocalDateTime criadoEm;
 
+  /**
+   * @deprecated Nao use esse construtor, ele so existe por causa do ORM
+   */
   @Deprecated
   private Categoria() {
   }

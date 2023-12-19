@@ -48,6 +48,10 @@ public class Livro {
   private Autor autor;
   private LocalDateTime criadoEm;
 
+
+  /**
+   * @deprecated Nao use esse construtor, ele so existe por causa do ORM
+   */
   @Deprecated
   private Livro() {
   }

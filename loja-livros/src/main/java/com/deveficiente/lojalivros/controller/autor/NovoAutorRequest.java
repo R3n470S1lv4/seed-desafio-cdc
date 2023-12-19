@@ -3,6 +3,7 @@ package com.deveficiente.lojalivros.controller.autor;
 import com.deveficiente.lojalivros.controller.annotations.UniqueValue;
 import com.deveficiente.lojalivros.domain.Autor;
 import com.deveficiente.lojalivros.domain.vo.Email;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class NovoAutorRequest {
   @Size(max = 400)
   private final String descricao;
 
+  @JsonCreator
   public NovoAutorRequest(String nome, String email, String descricao) {
     this.nome = nome;
     this.email = email;

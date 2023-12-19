@@ -17,8 +17,7 @@ public class DetalhesLivroContoller {
 
   @GetMapping("/{id}")
   public ResponseEntity<DetalhesLivroResponse> detalhes(@PathVariable String id) {
-    return livroRepository.findById(
-            id)
+    return livroRepository.findById(id)
         .map(DetalhesLivroResponse::of)
         .map(ResponseEntity::ok)
         .orElse(ResponseEntity.notFound().build());

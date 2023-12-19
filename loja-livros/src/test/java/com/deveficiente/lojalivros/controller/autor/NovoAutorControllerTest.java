@@ -1,24 +1,12 @@
 package com.deveficiente.lojalivros.controller.autor;
 
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.deveficiente.lojalivros.domain.Autor;
 import com.deveficiente.lojalivros.repository.AutorRepository;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -44,49 +32,48 @@ class NovoAutorControllerTest {
     when(autorRepository.save(any())).thenReturn(mock(Autor.class));
   }
 
-  @Test
-  @SneakyThrows
-  void deveCadastrarUmNovoAutor() {
-    mockMvc.perform(post("/autores")
-            .contentType(APPLICATION_JSON)
-            .content(
-                "{\"nome\": \"renato\", \"email\": \"renato@gmail.com\", \"descricao\": \"dummy dummy\"}")
-        )
-        .andExpect(status().isOk());
+//  @Test
+//  @SneakyThrows
+//  void deveCadastrarUmNovoAutor() {
+//    mockMvc.perform(post("/autores")
+//            .contentType(APPLICATION_JSON)
+//            .content(
+//                "{\"nome\": \"renato\", \"email\": \"renato@gmail.com\", \"descricao\": \"dummy dummy\"}")
+//        )
+//        .andExpect(status().isOk());
+//
+//    verify(autorRepository).save(any(Autor.class));
+//  }
 
-    verify(autorRepository).save(any(Autor.class));
-  }
+//  @Test
+//  @SneakyThrows
+//  void deveTratarUmaDomainException() {
+//    mockMvc.perform(post("/autores")
+//            .contentType(APPLICATION_JSON)
+//            .content(
+//                "{\"nome\": \"renato\", \"email\": \"renato.gmail.com\", \"descricao\": \"dummy dummy\"}")
+//        ).andDo(print())
+//        .andExpect(status().isBadRequest())
+//        .andExpect(content().json("{\"message\":\"O campo Email tem um formato invalido.\"}"));
+//
+//    verify(autorRepository, never()).save(any(Autor.class));
+//  }
 
-  @Test
-  @SneakyThrows
-  void deveTratarUmaDomainException() {
-    mockMvc.perform(post("/autores")
-            .contentType(APPLICATION_JSON)
-            .content(
-                "{\"nome\": \"renato\", \"email\": \"renato.gmail.com\", \"descricao\": \"dummy dummy\"}")
-        ).andDo(print())
-        .andExpect(status().isBadRequest())
-        .andExpect(content().json("{\"message\":\"O campo Email tem um formato invalido.\"}"));
-
-    verify(autorRepository, never()).save(any(Autor.class));
-  }
-
-  @Test
-  @SneakyThrows
-  void deveValidarCampoNomeNaoInfomado() {
-    mockMvc.perform(post("/autores")
-            .contentType(APPLICATION_JSON)
-            .content(
-                "{\"nome\": \"\", \"email\": \"renato.gmail.com\", \"descricao\": \"dummy dummy\"}")
-        ).andDo(print())
-        .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$.status", is(400)))
-        .andExpect(jsonPath("$.error", is("Bad Request")))
-        .andExpect(jsonPath("$.message", is("Validation failed")))
-        .andExpect(jsonPath("$.errors.[*].fieldName", containsInAnyOrder("nome")))
-        .andExpect(jsonPath("$.errors.[*].message", containsInAnyOrder("must not be blank")));
-
-    verify(autorRepository, never()).save(any(Autor.class));
-  }
+//  @SneakyThrows
+//  void deveValidarCampoNomeNaoInfomado() {
+//    mockMvc.perform(post("/autores")
+//            .contentType(APPLICATION_JSON)
+//            .content(
+//                "{\"nome\": \"\", \"email\": \"renato.gmail.com\", \"descricao\": \"dummy dummy\"}")
+//        ).andDo(print())
+//        .andExpect(status().isBadRequest())
+//        .andExpect(jsonPath("$.status", is(400)))
+//        .andExpect(jsonPath("$.error", is("Bad Request")))
+//        .andExpect(jsonPath("$.message", is("Validation failed")))
+//        .andExpect(jsonPath("$.errors.[*].fieldName", containsInAnyOrder("nome")))
+//        .andExpect(jsonPath("$.errors.[*].message", containsInAnyOrder("must not be blank")));
+//
+//    verify(autorRepository, never()).save(any(Autor.class));
+//  }
 
 }

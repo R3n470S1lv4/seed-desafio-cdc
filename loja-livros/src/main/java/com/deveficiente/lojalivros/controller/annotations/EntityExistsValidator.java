@@ -4,6 +4,7 @@ import static java.text.MessageFormat.format;
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+import com.deveficiente.lojalivros.domain.Precondition;
 import com.deveficiente.lojalivros.domain.exceptions.PreConditionException;
 import javax.persistence.EntityManager;
 import javax.validation.ConstraintValidator;
@@ -15,10 +16,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class EntityExistsValidator implements ConstraintValidator<EntityExists, Object> {
 
+  private final EntityManager entityManager;
   private String fieldName;
   private Class<?> klass;
   private String message;
-  private final EntityManager entityManager;
 
   @Override
   public void initialize(EntityExists params) {
@@ -56,8 +57,10 @@ public class EntityExistsValidator implements ConstraintValidator<EntityExists, 
   }
 
   private boolean isNotExists(Object value) {
+    Precondition.requireNonNull(value).andNonBlank();
+
     return !entityManager.createQuery(
-            format("SELECT 1 FROM {0} WHERE {1} = :value", klass.getName(), fieldName))
+            format("SELECT 1 FROM {0} WHERE UPPER({1}) = UPPER(:value)", klass.getName(), fieldName))
         .setParameter("value", "'" + value + "'")
         .getResultList()
         .isEmpty();

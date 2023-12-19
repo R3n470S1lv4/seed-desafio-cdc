@@ -8,7 +8,6 @@ import lombok.Getter;
 @Getter
 public class NovoLivroResponse {
 
-
   private final String id;
   private final String isbn;
   private final String titulo;
