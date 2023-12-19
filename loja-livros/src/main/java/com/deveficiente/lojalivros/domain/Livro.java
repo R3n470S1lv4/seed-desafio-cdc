@@ -1,15 +1,9 @@
 package com.deveficiente.lojalivros.domain;
 
-import static com.deveficiente.lojalivros.domain.ValidationUtils.isLengthGreaterThan;
-import static com.deveficiente.lojalivros.domain.ValidationUtils.isLengthLessThan;
-import static com.deveficiente.lojalivros.domain.ValidationUtils.isValueLessThan;
-import static java.math.BigDecimal.valueOf;
+import static com.deveficiente.lojalivros.domain.Precondition.requireNonNull;
+import static java.math.BigInteger.valueOf;
 import static java.time.LocalDateTime.now;
-import static java.util.Objects.isNull;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
-import com.deveficiente.lojalivros.domain.exceptions.InvalidFieldLengthValueException;
-import com.deveficiente.lojalivros.domain.exceptions.MandatoryFieldException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -60,53 +54,29 @@ public class Livro {
   public Livro(String isbn, String titulo, String resumo, String sumario, BigDecimal valor,
       int numeroPaginas, LocalDate dataPublicacao, Categoria categoria, Autor autor) {
 
-    validaParametros(isbn, titulo, resumo, sumario, valor, numeroPaginas, dataPublicacao, categoria,
-        autor);
-
     this.id = UUID.randomUUID().toString();
-    this.isbn = isbn;
-    this.titulo = titulo;
-    this.resumo = resumo;
-    this.sumario = sumario;
-    this.valor = valor;
-    this.numeroPaginas = numeroPaginas;
-    this.dataPublicacao = dataPublicacao;
-    this.categoria = categoria;
-    this.autor = autor;
+    this.isbn = requireNonNull(isbn, "O campo ISBN deve ser preenchido.")
+        .andNonBlank().take();
+    this.titulo = requireNonNull(titulo, "O campo TITULO deve ser preenchido.")
+        .andNonBlank().take();
+    this.resumo = requireNonNull(resumo, "O comprimento do campo RESUMO deve ser entre 1 e 500.")
+        .LengthBetween(1, 500)
+        .take();
+    this.sumario = requireNonNull(sumario, "O campo SUMARIO deve ser preenchido.")
+        .andNonBlank()
+        .take();
+    this.valor = requireNonNull(valor, "O campo VALOR deve ser preenchido. E o valor minimo é 20.")
+        .isValueLessThan(valueOf(20))
+        .take();
+    this.numeroPaginas = requireNonNull(numeroPaginas,
+        "O campo NUMERO DE PAGINAS deve ser preenchido. E deve possuir no minimo 100 paginas.")
+        .isValueLessThan(100).take();
+    this.dataPublicacao = requireNonNull(dataPublicacao,
+        "O campo DataPublicacao deve ser preenchido. E deve ser posterior a data atual.")
+        .isAfter(LocalDate.now())
+        .take();
+    this.categoria = requireNonNull(categoria, "O campo CATEGORIA deve ser preenchido.").take();
+    this.autor = requireNonNull(autor, "O campo AUTOR deve ser preenchido.").take();
     this.criadoEm = now();
   }
-
-  private static void validaParametros(String isbn, String titulo, String resumo, String sumario,
-      BigDecimal valor, int numeroPaginas, LocalDate dataPublicacao, Categoria categoria,
-      Autor autor) {
-    if (isBlank(isbn)) {
-      throw new MandatoryFieldException("ISBN");
-    }
-    if (isBlank(titulo)) {
-      throw new MandatoryFieldException("TITULO");
-    }
-    if (isLengthLessThan(resumo, 1) || isLengthGreaterThan(resumo, 500)) {
-      throw new InvalidFieldLengthValueException("RESUMO", 500);
-    }
-    if (isBlank(sumario)) {
-      throw new MandatoryFieldException("SUMARIO");
-    }
-    if (isValueLessThan(valor, valueOf(20))) {
-      throw new MandatoryFieldException("VALOR", "E o valor minimo é 20.");
-    }
-    if (isValueLessThan(numeroPaginas, 100)) {
-      throw new MandatoryFieldException("NUMERO DE PAGINAS",
-          "E deve possuir no minimo 20 paginas.");
-    }
-    if (dataPublicacao.isBefore(LocalDate.now()) || dataPublicacao.equals(LocalDate.now())) {
-      throw new MandatoryFieldException("dataPublicacao", "E deve ser posterior a data atual.");
-    }
-    if (isNull(categoria)) {
-      throw new MandatoryFieldException("CATEGORIA");
-    }
-    if (isNull(autor)) {
-      throw new MandatoryFieldException("Autor");
-    }
-  }
-
 }

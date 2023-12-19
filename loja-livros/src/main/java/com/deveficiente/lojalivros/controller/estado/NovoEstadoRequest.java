@@ -4,7 +4,7 @@ import com.deveficiente.lojalivros.controller.annotations.EntityExists;
 import com.deveficiente.lojalivros.controller.annotations.UniqueValue;
 import com.deveficiente.lojalivros.domain.Estado;
 import com.deveficiente.lojalivros.domain.Pais;
-import com.deveficiente.lojalivros.domain.PreconditionException;
+import com.deveficiente.lojalivros.domain.exceptions.PreconditionException;
 import com.deveficiente.lojalivros.repository.PaisRepository;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

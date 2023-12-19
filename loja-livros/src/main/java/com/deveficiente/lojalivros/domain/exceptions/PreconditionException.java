@@ -1,12 +1,14 @@
 package com.deveficiente.lojalivros.domain.exceptions;
 
-public static class PreconditionException extends RuntimeException {
+import static java.text.MessageFormat.format;
 
-    public PreconditionException(String message) {
-      super(message);
-    }
+public class PreconditionException extends RuntimeException {
 
-    public PreconditionException(String message, Object... arguments) {
-      super(format(message, arguments));
-    }
+  public PreconditionException(String message) {
+    super(message);
   }
+
+  public PreconditionException(String message, Object... arguments) {
+    super(format(message, arguments));
+  }
+}

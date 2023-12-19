@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
-import com.deveficiente.lojalivros.domain.exceptions.PreConditionException;
+import com.deveficiente.lojalivros.domain.exceptions.PreconditionException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.stream.Stream;
@@ -26,14 +26,27 @@ class LivroTest {
   public static final String RESUMO_COM_500_CHARS = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce faucibus augue a risus commodo eleifend. Pellentesque tincidunt laoreet diam vitae luctus. Aenean nulla justo, vestibulum ut leo eu, varius finibus lectus. In ac velit lectus. Aliquam tempor tempor dolor, sed facilisis velit posuere eget. Vestibulum facilisis felis nulla, a egestas eros luctus sed. Sed accumsan, mi vel posuere suscipit, ipsum nisi volutpat purus, tempus vulputate tellus libero vitae tellus. Aliquam auctor lectus in.";
   public static final LocalDate DATA_PUBLICACAO_FUTURO = now().plusDays(1);
 
+  public static Stream<Arguments> provideInvalidValuesForFieldValor() {
+    return Stream.of(Arguments.of(valueOf(19)),
+        Arguments.of(valueOf(15)), Arguments.of(valueOf(-1)), Arguments.of(valueOf(0)));
+  }
+
+  public static Stream<Arguments> provideDate() {
+    return Stream.of(
+        Arguments.of(now().minusDays(1)),
+        Arguments.of(now())
+    );
+  }
+
   @ParameterizedTest
   @NullAndEmptySource()
   void deveValidarISBNObrigatorio(String isbn) {
     assertThatThrownBy(() ->
-        new Livro(null, "dummy", "dummy", "dummy", new BigDecimal("23"), 100, now(),
+        new Livro(null, "dummy", "dummy", "dummy", new BigDecimal("23"), 100,
+            DATA_PUBLICACAO_FUTURO,
             mock(Categoria.class),
             mock(Autor.class))
-    ).isInstanceOf(PreConditionException.class)
+    ).isInstanceOf(PreconditionException.class)
         .hasMessage("O campo ISBN deve ser preenchido.");
   }
 
@@ -41,10 +54,11 @@ class LivroTest {
   @NullAndEmptySource()
   void deveValidarTituloObrigatorio(String titulo) {
     assertThatThrownBy(() ->
-        new Livro("dummy", titulo, "dummy", "dummy", new BigDecimal("23"), 100, now(),
+        new Livro("dummy", titulo, "dummy", "dummy", new BigDecimal("23"), 100,
+            DATA_PUBLICACAO_FUTURO,
             mock(Categoria.class),
             mock(Autor.class))
-    ).isInstanceOf(PreConditionException.class)
+    ).isInstanceOf(PreconditionException.class)
         .hasMessage("O campo TITULO deve ser preenchido.");
   }
 
@@ -53,28 +67,24 @@ class LivroTest {
   @ValueSource(strings = RESUMO_COM_501_CHARS)
   void deveValidarResumoObrigatorio(String resumo) {
     assertThatThrownBy(() ->
-        new Livro("dummy", "dummy", resumo, "dummy", new BigDecimal("23"), 100, now(),
+        new Livro("dummy", "dummy", resumo, "dummy", new BigDecimal("23"), 100,
+            DATA_PUBLICACAO_FUTURO,
             mock(Categoria.class),
             mock(Autor.class))
-    ).isInstanceOf(PreConditionException.class)
+    ).isInstanceOf(PreconditionException.class)
         .hasMessage("O comprimento do campo RESUMO deve ser entre 1 e 500.");
   }
-
 
   @ParameterizedTest
   @MethodSource("provideInvalidValuesForFieldValor")
   void deveValidarValorObrigatorio(BigDecimal valor) {
     assertThatThrownBy(() ->
-        new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", valor, 100, now(),
+        new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", valor, 100,
+            DATA_PUBLICACAO_FUTURO,
             mock(Categoria.class),
             mock(Autor.class))
-    ).isInstanceOf(PreConditionException.class)
+    ).isInstanceOf(PreconditionException.class)
         .hasMessage("O campo VALOR deve ser preenchido. E o valor minimo é 20.");
-  }
-
-  public static Stream<Arguments> provideInvalidValuesForFieldValor() {
-    return Stream.of(Arguments.of(valueOf(19)),
-        Arguments.of(valueOf(15)), Arguments.of(valueOf(-1)), Arguments.of(valueOf(0)));
   }
 
   @ParameterizedTest
@@ -82,12 +92,12 @@ class LivroTest {
   void deveValidarNumeroPaginasObrigatorio(int numeroPaginas) {
     assertThatThrownBy(() ->
         new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", valueOf(20), numeroPaginas,
-            now(),
+            DATA_PUBLICACAO_FUTURO,
             mock(Categoria.class),
             mock(Autor.class))
-    ).isInstanceOf(PreConditionException.class)
+    ).isInstanceOf(PreconditionException.class)
         .hasMessage(
-            "O campo NUMERO DE PAGINAS deve ser preenchido. E deve possuir no minimo 20 paginas.");
+            "O campo NUMERO DE PAGINAS deve ser preenchido. E deve possuir no minimo 100 paginas.");
   }
 
   @Test
@@ -97,7 +107,7 @@ class LivroTest {
             DATA_PUBLICACAO_FUTURO,
             null,
             mock(Autor.class))
-    ).isInstanceOf(PreConditionException.class)
+    ).isInstanceOf(PreconditionException.class)
         .hasMessage(
             "O campo CATEGORIA deve ser preenchido.");
   }
@@ -109,9 +119,9 @@ class LivroTest {
             DATA_PUBLICACAO_FUTURO,
             mock(Categoria.class),
             null)
-    ).isInstanceOf(PreConditionException.class)
+    ).isInstanceOf(PreconditionException.class)
         .hasMessage(
-            "O campo Autor deve ser preenchido.");
+            "O campo AUTOR deve ser preenchido.");
   }
 
   @Test
@@ -161,13 +171,6 @@ class LivroTest {
     assertThatThrownBy(
         () -> new Livro("dummy", "dummy", RESUMO_COM_500_CHARS, "dummy", new BigDecimal("23"),
             100, value, mock(Categoria.class), mock(Autor.class))).isInstanceOf(
-        PreConditionException.class);
-  }
-
-  public static Stream<Arguments> provideDate() {
-    return Stream.of(
-        Arguments.of(now().minusDays(1)),
-        Arguments.of(now())
-    );
+        PreconditionException.class);
   }
 }

@@ -1,5 +1,10 @@
 package com.deveficiente.lojalivros.domain;
 
+import static com.deveficiente.lojalivros.domain.ValidationUtils.isLengthGreaterThan;
+import static com.deveficiente.lojalivros.domain.ValidationUtils.isLengthLessThan;
+
+import com.deveficiente.lojalivros.domain.exceptions.PreconditionException;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -16,10 +21,6 @@ public class Precondition<T> {
     this.message = message;
   }
 
-  public Precondition(T value) {
-    this.value = value;
-  }
-
   public static <T> Precondition<T> requireNonNull(T value, String message) {
     if (value == null) {
       throw new PreconditionException(message);
@@ -30,10 +31,10 @@ public class Precondition<T> {
 
   public static <T> Precondition<T> requireNonNull(T value) {
     if (value == null) {
-      throw new PreconditionException();
+      throw new PreconditionException("Value cannot be null");
     }
 
-    return new Precondition<>(value);
+    return new Precondition<>(value, "Value cannot be null");
   }
 
   public Precondition<T> andNonBlank() {
@@ -55,7 +56,7 @@ public class Precondition<T> {
     return this.value instanceof Collection<?>;
   }
 
-  private <R> R getValueAs(Class<R> returnType) {
+  private <R> R castTo(Class<R> returnType) {
     if (returnType.isInstance(this.value)) {
       return returnType.cast(this.value);
     } else {
@@ -63,19 +64,12 @@ public class Precondition<T> {
     }
   }
 
-  public Precondition<T> andLengthGreaterThanOrEqualTo(int length, String message) {
-    if (isString() && getValueAs(String.class).trim().length() < length) {
-      throw new PreconditionException(message);
-    }
-    return this;
-  }
-
   public T take() {
     return this.value;
   }
 
   public Precondition<T> andGreaterThan(int value, String message) {
-    if (isInteger() && getValueAs(Integer.class) <= value) {
+    if (isInteger() && castTo(Integer.class) <= value) {
       throw new PreconditionException(message);
     }
     return this;
@@ -93,4 +87,45 @@ public class Precondition<T> {
         .anyMatch(Objects::isNull);
   }
 
+  public Precondition<T> minLength(int minLength) {
+    if (isString() && isLengthLessThan(castTo(String.class), minLength)) {
+      throw new PreconditionException(message);
+    }
+    return this;
+  }
+
+  public Precondition<T> maxLength(int maxLength) {
+    if (isString() && isLengthGreaterThan(castTo(String.class).trim(), maxLength)) {
+      throw new PreconditionException(message);
+    }
+    return this;
+  }
+
+  public Precondition<T> maxLength(int maxLength, String message) {
+    if (isString() && isLengthGreaterThan(castTo(String.class).trim(), maxLength)) {
+      throw new PreconditionException(message);
+    }
+    return this;
+  }
+
+  public Precondition<T> LengthBetween(int minLength, int maxLength) {
+    minLength(minLength);
+    maxLength(maxLength);
+    return this;
+  }
+
+  public Precondition<T> isValueLessThan(Number minValue) {
+    if (ValidationUtils.isValueLessThan(castTo(Number.class), minValue)) {
+      throw new PreconditionException(message);
+    }
+    return this;
+  }
+
+  public Precondition<T> isAfter(LocalDate now) {
+    LocalDate other = castTo(LocalDate.class);
+    if (now.isAfter(other) || now.isEqual(other)) {
+      throw new PreconditionException(message);
+    }
+    return this;
+  }
 }

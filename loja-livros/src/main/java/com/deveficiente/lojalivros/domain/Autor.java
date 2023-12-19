@@ -1,11 +1,9 @@
 package com.deveficiente.lojalivros.domain;
 
 
+import static com.deveficiente.lojalivros.domain.Precondition.requireNonNull;
 import static java.time.LocalDateTime.now;
-import static java.util.Objects.isNull;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
-import com.deveficiente.lojalivros.domain.exceptions.PreConditionException;
 import com.deveficiente.lojalivros.domain.vo.Email;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -37,27 +35,15 @@ public class Autor {
   }
 
   public Autor(String nome, Email email, String descricao) {
-    validaParametros(nome, email, descricao);
-
     this.id = UUID.randomUUID().toString();
-    this.nome = nome;
-    this.email = email;
-    this.descricao = descricao;
+    this.nome = requireNonNull(nome, "O campo Nome deve ser preenchido.")
+        .andNonBlank()
+        .take();
+    this.email = requireNonNull(email, "O campo Email deve ser preenchido.").take();
+    this.descricao = requireNonNull(descricao, "O campo Descricao deve ser preenchido.")
+        .andNonBlank()
+        .maxLength(400, "O campo Descricao nao pode passar de 400 caracteres.")
+        .take();
     this.criadoEm = now();
-  }
-
-  private void validaParametros(String nome, Email email, String descricao) {
-    if (isBlank(nome)) {
-      throw new PreConditionException("O campo Nome deve ser preenchido.");
-    }
-    if (isBlank(descricao)) {
-      throw new PreConditionException("O campo Descricao deve ser preenchido.");
-    }
-    if (descricao.length() > 400) {
-      throw new PreConditionException("O campo Descricao nao pode passar de 400 caracteres.");
-    }
-    if (isNull(email)) {
-      throw new PreConditionException("O campo Email deve ser preenchido.");
-    }
   }
 }

@@ -5,7 +5,7 @@ import com.deveficiente.lojalivros.controller.annotations.UniqueValue;
 import com.deveficiente.lojalivros.domain.Autor;
 import com.deveficiente.lojalivros.domain.Categoria;
 import com.deveficiente.lojalivros.domain.Livro;
-import com.deveficiente.lojalivros.domain.exceptions.PreConditionException;
+import com.deveficiente.lojalivros.domain.exceptions.PreconditionException;
 import com.deveficiente.lojalivros.repository.AutorRepository;
 import com.deveficiente.lojalivros.repository.CategoriaRepository;
 import java.math.BigDecimal;
@@ -49,11 +49,11 @@ public class NovoLivroRequest {
 
   public Livro to(AutorRepository autorRepository, CategoriaRepository categoriaRepository) {
     Autor autor = autorRepository.findById(autorId)
-        .orElseThrow(() -> new PreConditionException(
+        .orElseThrow(() -> new PreconditionException(
             "Autor {0} nao encontrado.", autorId));
 
     Categoria categoria = categoriaRepository.findById(categoriaId)
-        .orElseThrow(() -> new PreConditionException(
+        .orElseThrow(() -> new PreconditionException(
             "Categoria {0} nao encontrada.", autorId));
 
     return new Livro(isbn, titulo, resumo, sumario, valor, numeroPaginas, dataPublicacao, categoria,

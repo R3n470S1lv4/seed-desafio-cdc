@@ -1,22 +1,21 @@
 package com.deveficiente.lojalivros.domain;
 
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.StringUtils.length;
 
 import java.math.BigDecimal;
 
 public class ValidationUtils {
 
-  public static boolean isValueLessThan(BigDecimal valor, BigDecimal minValue) {
-    if (isNull(valor)) {
+  public static boolean isValueLessThan(Number value, Number minValue) {
+    if (isNull(value)) {
       return true;
     }
-    return valor.compareTo(minValue) < 0;
-  }
 
-  public static boolean isValueLessThan(Integer value, Integer minValue) {
-    return nonNull(value) && value.compareTo(minValue) < 0;
+    BigDecimal valueDecimal = new BigDecimal(value.toString());
+    BigDecimal minValueDecimal = new BigDecimal(minValue.toString());
+
+    return valueDecimal.compareTo(minValueDecimal) < 0;
   }
 
   public static boolean isLengthGreaterThan(String value, int maxLength) {

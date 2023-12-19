@@ -3,7 +3,6 @@ package com.deveficiente.lojalivros.controller.annotations;
 import static java.text.MessageFormat.format;
 import static java.util.Objects.isNull;
 
-import com.deveficiente.lojalivros.domain.Precondition;
 import javax.persistence.EntityManager;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -42,8 +41,6 @@ public class UniqueValueValidator implements ConstraintValidator<UniqueValue, Ob
   }
 
   private boolean isNotUnique(Object value) {
-    Precondition.requireNonNull(value).andNonBlank();
-
     return !entityManager.createQuery(
             format("SELECT 1 FROM {0} WHERE UPPER({1}) = UPPER(:value)", klass.getName(), fieldName))
         .setParameter("value", value.toString().toUpperCase())

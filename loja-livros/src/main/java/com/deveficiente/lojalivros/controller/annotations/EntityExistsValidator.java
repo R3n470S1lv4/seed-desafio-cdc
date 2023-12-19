@@ -4,8 +4,7 @@ import static java.text.MessageFormat.format;
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-import com.deveficiente.lojalivros.domain.Precondition;
-import com.deveficiente.lojalivros.domain.exceptions.PreConditionException;
+import com.deveficiente.lojalivros.domain.exceptions.PreconditionException;
 import javax.persistence.EntityManager;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -34,7 +33,7 @@ public class EntityExistsValidator implements ConstraintValidator<EntityExists, 
 
   private String requireNonNull(String value) {
     if (isBlank(value)) {
-      throw new PreConditionException(
+      throw new PreconditionException(
           format("O nome do campo {0} deve ser o mesmo declarado na entidade: {1}", value,
               klass.getName()));
     }
@@ -57,8 +56,6 @@ public class EntityExistsValidator implements ConstraintValidator<EntityExists, 
   }
 
   private boolean isNotExists(Object value) {
-    Precondition.requireNonNull(value).andNonBlank();
-
     return !entityManager.createQuery(
             format("SELECT 1 FROM {0} WHERE UPPER({1}) = UPPER(:value)", klass.getName(), fieldName))
         .setParameter("value", "'" + value + "'")

@@ -3,7 +3,7 @@ package com.deveficiente.lojalivros.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.deveficiente.lojalivros.domain.exceptions.PreConditionException;
+import com.deveficiente.lojalivros.domain.exceptions.PreconditionException;
 import org.junit.jupiter.api.Test;
 
 class CategoriaTest {
@@ -20,6 +20,6 @@ class CategoriaTest {
   @Test
   void deveCriaCategoriaSemNome() {
     assertThatThrownBy(() -> new Categoria(null))
-        .isExactlyInstanceOf(PreConditionException.class);
+        .isExactlyInstanceOf(PreconditionException.class);
   }
 }
