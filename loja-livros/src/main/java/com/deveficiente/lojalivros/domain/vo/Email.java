@@ -16,26 +16,26 @@ public class Email {
       + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
 
   @Column(name = "EMAIL")
-  private final String value;
+  private final String endereco;
 
   @Deprecated
   private Email() {
-    value = null;
+    endereco = null;
   }
 
-  public Email(String value) {
-    if (isBlank(value)) {
+  public Email(String endereco) {
+    if (isBlank(endereco)) {
       throw new PreconditionException("O campo Email deve ser preenchido.");
     }
-    if (!Pattern.compile(REGEX).matcher(value).matches()) {
+    if (!Pattern.compile(REGEX).matcher(endereco).matches()) {
       throw new PreconditionException("O campo Email tem um formato invalido.");
     }
 
-    this.value = value;
+    this.endereco = endereco;
   }
 
   @Override
   public String toString() {
-    return value;
+    return endereco;
   }
 }

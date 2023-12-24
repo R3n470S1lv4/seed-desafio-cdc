@@ -45,9 +45,9 @@ public class EntityExistsValidator implements ConstraintValidator<EntityExists, 
     constraintValidatorContext.disableDefaultConstraintViolation();
 
     if (isNull(value)) {
-      buildMessage(constraintValidatorContext, "O campo ''{0}'' deve ser preenchido.", fieldName);
-      return false;
+      return true;
     }
+
     if (isNotExists(value)) {
       buildMessage(constraintValidatorContext, message, value.toString());
       return false;
@@ -56,9 +56,9 @@ public class EntityExistsValidator implements ConstraintValidator<EntityExists, 
   }
 
   private boolean isNotExists(Object value) {
-    return !entityManager.createQuery(
+    return entityManager.createQuery(
             format("SELECT 1 FROM {0} WHERE UPPER({1}) = UPPER(:value)", klass.getName(), fieldName))
-        .setParameter("value", "'" + value + "'")
+        .setParameter("value", value)
         .getResultList()
         .isEmpty();
   }

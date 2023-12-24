@@ -8,13 +8,13 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ListaAutoresResponse {
 
-  private String id;
   private final String nome;
   private final String email;
   private final String descricao;
+  private String id;
 
   public static ListaAutoresResponse of(Autor autor) {
-    return new ListaAutoresResponse(autor.getId(), autor.getNome(), autor.getEmail().getValue(),
+    return new ListaAutoresResponse(autor.getId(), autor.getNome(), autor.getEmail().getEndereco(),
         autor.getDescricao());
   }
 }

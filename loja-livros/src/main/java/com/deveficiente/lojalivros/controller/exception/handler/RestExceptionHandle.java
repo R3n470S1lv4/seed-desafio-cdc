@@ -2,6 +2,7 @@ package com.deveficiente.lojalivros.controller.exception.handler;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
+import com.deveficiente.lojalivros.domain.exceptions.PosconditionException;
 import com.deveficiente.lojalivros.domain.exceptions.PreconditionException;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,15 @@ public class RestExceptionHandle {
       WebRequest webRequest) {
 
     return ResponseEntity.badRequest()
-        .body(new ApiErrorDTO(BAD_REQUEST, PreconditionException.getMessage()));
+        .body(new ApiErrorDTO(PreconditionException.getMessage()));
+  }
+
+  @ExceptionHandler(PosconditionException.class)
+  public ResponseEntity<ApiErrorDTO> domainException(PosconditionException PosconditionException,
+      WebRequest webRequest) {
+
+    return ResponseEntity.badRequest()
+        .body(new ApiErrorDTO(PosconditionException.getMessage()));
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)

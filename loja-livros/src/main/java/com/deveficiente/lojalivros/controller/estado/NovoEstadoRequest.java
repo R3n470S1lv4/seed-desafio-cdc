@@ -4,7 +4,7 @@ import com.deveficiente.lojalivros.controller.annotations.EntityExists;
 import com.deveficiente.lojalivros.controller.annotations.UniqueValue;
 import com.deveficiente.lojalivros.domain.Estado;
 import com.deveficiente.lojalivros.domain.Pais;
-import com.deveficiente.lojalivros.domain.exceptions.PreconditionException;
+import com.deveficiente.lojalivros.domain.exceptions.PosconditionException;
 import com.deveficiente.lojalivros.repository.PaisRepository;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -21,11 +21,9 @@ public class NovoEstadoRequest {
   @NotBlank
   private String pais;
 
-  public Estado of(NovoEstadoRequest estado, PaisRepository paisRepository) {
-    Pais pais = paisRepository.findByNomeIgnoreCase(estado.pais)
-        .orElseThrow(() -> new PreconditionException("O Pais {0} nao foi cadastrado.",
-            estado.pais));
-
-    return new Estado(estado.getNome(), pais);
+  public Estado of(PaisRepository paisRepository) {
+    Pais pais = paisRepository.findByNomeIgnoreCase(this.pais)
+        .orElseThrow(PosconditionException::new);
+    return new Estado(nome, pais);
   }
 }

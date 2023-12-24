@@ -14,7 +14,7 @@ public class NovoAutorRequest {
   @NotBlank
   private final String nome;
   @NotBlank
-  @UniqueValue(domainClass = Autor.class, fieldName = "email.value", message = "Já existe um autor com esse endereço de email: {0}.")
+  @UniqueValue(domainClass = Autor.class, fieldName = "email.endereco", message = "Já existe um autor com esse endereço de email: {0}.")
   private final String email;
   @NotBlank
   @Size(max = 400)

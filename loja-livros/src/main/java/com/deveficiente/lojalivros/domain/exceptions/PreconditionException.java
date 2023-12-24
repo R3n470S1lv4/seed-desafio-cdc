@@ -4,6 +4,10 @@ import static java.text.MessageFormat.format;
 
 public class PreconditionException extends RuntimeException {
 
+  public PreconditionException() {
+    super();
+  }
+
   public PreconditionException(String message) {
     super(message);
   }

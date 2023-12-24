@@ -1,6 +1,7 @@
 package com.deveficiente.lojalivros.controller.exception.handler;
 
 import static java.time.LocalDateTime.now;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,6 +17,10 @@ public record ApiErrorDTO(
 
   public ApiErrorDTO(HttpStatus status, String message) {
     this(now(), status.value(), status.getReasonPhrase(), message, List.of());
+  }
+
+  public ApiErrorDTO(String message) {
+    this(now(), BAD_REQUEST.value(), BAD_REQUEST.getReasonPhrase(), message, List.of());
   }
 
   public ApiErrorDTO(HttpStatus status, List<FieldErrorDTO> errors) {

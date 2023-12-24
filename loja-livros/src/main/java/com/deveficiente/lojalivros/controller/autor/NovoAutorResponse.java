@@ -19,7 +19,7 @@ public class NovoAutorResponse {
   }
 
   public static NovoAutorResponse of(Autor autor) {
-    return new NovoAutorResponse(autor.getId(), autor.getNome(), autor.getEmail().getValue(),
+    return new NovoAutorResponse(autor.getId(), autor.getNome(), autor.getEmail().getEndereco(),
         autor.getDescricao());
   }
 }

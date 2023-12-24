@@ -24,7 +24,7 @@ public class NovoEstadoController {
   public ResponseEntity<NovoEstadoResponse> cadastrar(
       @Valid @RequestBody NovoEstadoRequest novoEstadoRequest) {
     Estado novoEstado = estadoRepository.save(
-        novoEstadoRequest.of(novoEstadoRequest, paisRepository));
+        novoEstadoRequest.of(paisRepository));
     return ResponseEntity.ok().body(NovoEstadoResponse.of(novoEstado));
   }
 

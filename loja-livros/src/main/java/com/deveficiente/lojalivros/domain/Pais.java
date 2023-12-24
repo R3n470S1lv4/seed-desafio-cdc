@@ -7,16 +7,19 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Entity
 @Table
 @Getter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Pais {
 
   @Id
   @Column(name = "PAIS_ID")
   private String id;
+  @EqualsAndHashCode.Include
   private String nome;
 
   /**
@@ -31,4 +34,5 @@ public class Pais {
     this.id = randomUUID().toString();
     this.nome = requireNonNull(nome, "O campo NOME deve ser preenchido.");
   }
+
 }
