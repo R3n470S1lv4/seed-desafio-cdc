@@ -32,9 +32,9 @@ public class Endereco {
   @Builder
   public Endereco(String logradouro, String bairro, String cidade, Pais pais, String complemento,
       String cep) {
-    this.logradouro = requireNonNull(logradouro).andNonBlank().take();
-    this.bairro = requireNonNull(bairro).andNonBlank().take();
-    this.cidade = requireNonNull(cidade).andNonBlank().take();
+    this.logradouro = requireNonNull(logradouro).nonBlank().take();
+    this.bairro = requireNonNull(bairro).nonBlank().take();
+    this.cidade = requireNonNull(cidade).nonBlank().take();
     this.pais = requireNonNull(pais).take();
     this.complemento = requireNonNull(complemento).take();
     this.cep = requireNonNull(cep).take();
@@ -46,7 +46,6 @@ public class Endereco {
     this(logradouro, bairro, cidade, pais, complemento, cep);
     this.estado = requireNonNull(estado).take();
   }
-
 
   public Endereco withEstado(Estado estado) {
     return new Endereco(this.logradouro, this.bairro, this.cidade, this.pais, this.complemento,

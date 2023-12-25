@@ -1,9 +1,9 @@
 package com.deveficiente.lojalivros.domain;
 
 import static com.deveficiente.lojalivros.domain.Precondition.requireNonNull;
+import static java.util.UUID.randomUUID;
 
 import com.deveficiente.lojalivros.domain.vo.Pessoa;
-import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -24,7 +24,6 @@ public class Pagamento {
   @Embedded
   private Pessoa pessoa;
 
-
   /**
    * @deprecated Nao use esse construtor, ele so existe por causa do ORM
    */
@@ -34,7 +33,7 @@ public class Pagamento {
 
   @Builder
   public Pagamento(Pessoa pessoa) {
-    this.id = UUID.randomUUID().toString();
+    this.id = randomUUID().toString();
     this.pessoa = requireNonNull(pessoa).take();
   }
 }

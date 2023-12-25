@@ -25,7 +25,6 @@ public class Pais {
   /**
    * @deprecated Nao use esse construtor, ele so existe por causa do ORM
    */
-
   @Deprecated
   private Pais() {
   }

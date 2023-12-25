@@ -7,6 +7,7 @@ import com.deveficiente.lojalivros.domain.exceptions.PreconditionException;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 public class Precondition<T> {
 
@@ -37,7 +38,7 @@ public class Precondition<T> {
     return new Precondition<>(value, "Value cannot be null");
   }
 
-  public Precondition<T> andNonBlank() {
+  public Precondition<T> nonBlank() {
     if (isString() && ((String) this.value).isBlank()) {
       throw new PreconditionException(this.message);
     }
@@ -114,8 +115,8 @@ public class Precondition<T> {
     return this;
   }
 
-  public Precondition<T> isValueLessThan(Number minValue) {
-    if (ValidationUtils.isValueLessThan(castTo(Number.class), minValue)) {
+  public Precondition<T> isNotLessThan(Number minValue) {
+    if (ValidationUtils.isLessThan(castTo(Number.class), minValue)) {
       throw new PreconditionException(message);
     }
     return this;
@@ -127,5 +128,19 @@ public class Precondition<T> {
       throw new PreconditionException(message);
     }
     return this;
+  }
+
+  public Precondition<T> match(String regex) {
+    String value = castTo(String.class);
+
+    if (!Pattern.compile(regex).matcher(value).matches()) {
+      throw new PreconditionException(message);
+    }
+    return this;
+  }
+
+  public Precondition<T> match(String regex, String message) {
+    this.message = message;
+    return match(regex);
   }
 }

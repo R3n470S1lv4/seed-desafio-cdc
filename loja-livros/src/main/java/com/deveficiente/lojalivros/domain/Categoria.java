@@ -1,9 +1,9 @@
 package com.deveficiente.lojalivros.domain;
 
 import static java.time.LocalDateTime.now;
+import static java.util.UUID.randomUUID;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -28,9 +28,9 @@ public class Categoria {
 
   public Categoria(String nome) {
 
-    this.id = UUID.randomUUID().toString();
+    this.id = randomUUID().toString();
     this.nome = Precondition.requireNonNull(nome, "O campo Nome deve ser preenchido.")
-        .andNonBlank()
+        .nonBlank()
         .take();
     this.criadoEm = now();
   }

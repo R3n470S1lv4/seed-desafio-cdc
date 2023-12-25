@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 public class ValidationUtils {
 
-  public static boolean isValueLessThan(Number value, Number minValue) {
+  public static boolean isLessThan(Number value, Number minValue) {
     if (isNull(value)) {
       return true;
     }

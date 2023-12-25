@@ -1,9 +1,7 @@
 package com.deveficiente.lojalivros.domain.vo;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import static com.deveficiente.lojalivros.domain.Precondition.requireNonNull;
 
-import com.deveficiente.lojalivros.domain.exceptions.PreconditionException;
-import java.util.regex.Pattern;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import lombok.Getter;
@@ -24,14 +22,10 @@ public class Email {
   }
 
   public Email(String endereco) {
-    if (isBlank(endereco)) {
-      throw new PreconditionException("O campo Email deve ser preenchido.");
-    }
-    if (!Pattern.compile(REGEX).matcher(endereco).matches()) {
-      throw new PreconditionException("O campo Email tem um formato invalido.");
-    }
-
-    this.endereco = endereco;
+    this.endereco = requireNonNull(endereco, "O campo Email deve ser preenchido.")
+        .nonBlank()
+        .match(REGEX, "O campo Email tem um formato invalido.")
+        .take();
   }
 
   @Override

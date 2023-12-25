@@ -13,7 +13,7 @@ public class Documento {
 
   private TipoDocumento tipoDocumento;
   //TODO VALIDAR
-  @Column(name = "DOCUMENTO")
+  @Column(name = "documento")
   private String value;
 
   /**
@@ -25,6 +25,6 @@ public class Documento {
 
   public Documento(TipoDocumento tipoDocumento, String value) {
     this.tipoDocumento = requireNonNull(tipoDocumento).take();
-    this.value = requireNonNull(value).andNonBlank().take();
+    this.value = requireNonNull(value).nonBlank().take();
   }
 }

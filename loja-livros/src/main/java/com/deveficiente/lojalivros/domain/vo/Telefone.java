@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 public class Telefone {
 
-  @Column(name = "NUMERO_TELEFONE")
+  @Column(name = "numero_telefone")
   private String numero;
 
   /**

@@ -37,11 +37,11 @@ public class Autor {
   public Autor(String nome, Email email, String descricao) {
     this.id = UUID.randomUUID().toString();
     this.nome = requireNonNull(nome, "O campo Nome deve ser preenchido.")
-        .andNonBlank()
+        .nonBlank()
         .take();
     this.email = requireNonNull(email, "O campo Email deve ser preenchido.").take();
     this.descricao = requireNonNull(descricao, "O campo Descricao deve ser preenchido.")
-        .andNonBlank()
+        .nonBlank()
         .maxLength(400, "O campo Descricao nao pode passar de 400 caracteres.")
         .take();
     this.criadoEm = now();

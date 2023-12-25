@@ -3,11 +3,11 @@ package com.deveficiente.lojalivros.domain;
 import static com.deveficiente.lojalivros.domain.Precondition.requireNonNull;
 import static java.math.BigInteger.valueOf;
 import static java.time.LocalDateTime.now;
+import static java.util.UUID.randomUUID;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -42,7 +42,6 @@ public class Livro {
   private Autor autor;
   private LocalDateTime criadoEm;
 
-
   /**
    * @deprecated Nao use esse construtor, ele so existe por causa do ORM
    */
@@ -54,23 +53,23 @@ public class Livro {
   public Livro(String isbn, String titulo, String resumo, String sumario, BigDecimal valor,
       int numeroPaginas, LocalDate dataPublicacao, Categoria categoria, Autor autor) {
 
-    this.id = UUID.randomUUID().toString();
+    this.id = randomUUID().toString();
     this.isbn = requireNonNull(isbn, "O campo ISBN deve ser preenchido.")
-        .andNonBlank().take();
+        .nonBlank().take();
     this.titulo = requireNonNull(titulo, "O campo TITULO deve ser preenchido.")
-        .andNonBlank().take();
+        .nonBlank().take();
     this.resumo = requireNonNull(resumo, "O comprimento do campo RESUMO deve ser entre 1 e 500.")
         .LengthBetween(1, 500)
         .take();
     this.sumario = requireNonNull(sumario, "O campo SUMARIO deve ser preenchido.")
-        .andNonBlank()
+        .nonBlank()
         .take();
     this.valor = requireNonNull(valor, "O campo VALOR deve ser preenchido. E o valor minimo é 20.")
-        .isValueLessThan(valueOf(20))
+        .isNotLessThan(valueOf(20))
         .take();
     this.numeroPaginas = requireNonNull(numeroPaginas,
         "O campo NUMERO DE PAGINAS deve ser preenchido. E deve possuir no minimo 100 paginas.")
-        .isValueLessThan(100).take();
+        .isNotLessThan(100).take();
     this.dataPublicacao = requireNonNull(dataPublicacao,
         "O campo DataPublicacao deve ser preenchido. E deve ser posterior a data atual.")
         .isAfter(LocalDate.now())

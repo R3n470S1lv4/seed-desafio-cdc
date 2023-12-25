@@ -16,9 +16,7 @@ public class NovaCompraRequest {
   private PessoaRequest pessoaRequest;
 
   public Pagamento of(EntityManager entityManager) {
-    return Pagamento.builder()
-        .pessoa(pessoaRequest.of(entityManager))
-        .build();
+    return new Pagamento(pessoaRequest.of(entityManager));
   }
 
   public String getPais() {

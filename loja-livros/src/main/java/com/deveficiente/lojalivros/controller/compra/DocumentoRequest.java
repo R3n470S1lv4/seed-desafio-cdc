@@ -12,8 +12,7 @@ public class DocumentoRequest {
   @NotNull
   private TipoDocumento tipoDocumento;
   @NotBlank
-//  @CPF
-//  @CNPJ
+  @com.deveficiente.lojalivros.controller.annotations.Documento
   private String value;
 
   public Documento of() {

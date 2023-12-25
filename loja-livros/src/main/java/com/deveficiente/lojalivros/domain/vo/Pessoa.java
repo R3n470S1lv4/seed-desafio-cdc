@@ -13,7 +13,7 @@ import lombok.Getter;
 public class Pessoa {
 
   private String nome;
-  @Column(name = "SOBRENOME")
+  @Column(name = "sobrenome")
   private String sobreNome;
   private Email email;
   private Documento documento;
@@ -28,8 +28,8 @@ public class Pessoa {
 
   public Pessoa(String nome, String sobreNome, Email email, Documento documento, Telefone telefone,
       Endereco endereco) {
-    this.nome = requireNonNull(nome).andNonBlank().take();
-    this.sobreNome = requireNonNull(sobreNome).andNonBlank().take();
+    this.nome = requireNonNull(nome).nonBlank().take();
+    this.sobreNome = requireNonNull(sobreNome).nonBlank().take();
     this.email = requireNonNull(email).take();
     this.documento = requireNonNull(documento).take();
     this.telefone = requireNonNull(telefone).take();
