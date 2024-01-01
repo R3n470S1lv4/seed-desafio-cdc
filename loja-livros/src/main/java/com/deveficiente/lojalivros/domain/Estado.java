@@ -43,8 +43,12 @@ public class Estado {
     return pais.getNome();
   }
 
+  public boolean isOf(Pais pais) {
+    return pais.equals(this.pais);
+  }
+
   public boolean isNotOf(Pais pais) {
-    return !pais.equals(this.pais);
+    return !isOf(pais);
   }
 
 }

@@ -1,5 +1,5 @@
-CREATE TABLE pagamento (
-	pagamento_id varchar(255) NOT NULL,
+CREATE TABLE compra (
+	compra_id varchar(255) NOT NULL,
   nome varchar(255) NOT NULL,
   sobrenome varchar(255) NOT NULL,
   email varchar(255) NOT NULL,
@@ -13,8 +13,8 @@ CREATE TABLE pagamento (
   pais_id varchar(255) NOT NULL,
   cep varchar(8) NOT NULL,
   complemento varchar(255) NOT NULL,
-	CONSTRAINT pagamento_pkey PRIMARY KEY (pagamento_id)
+  CONSTRAINT compra_pkey PRIMARY KEY (compra_id)
 );
 
-ALTER TABLE pagamento ADD CONSTRAINT fk_pagamento_pais FOREIGN KEY (pais_id) REFERENCES pais (pais_id);
-ALTER TABLE pagamento ADD CONSTRAINT fk_pagamento_estado FOREIGN KEY (estado_id) REFERENCES estado (estado_id);
+ALTER TABLE compra ADD CONSTRAINT fk_compra_pais FOREIGN KEY (pais_id) REFERENCES pais (pais_id);
+ALTER TABLE compra ADD CONSTRAINT fk_compra_estado FOREIGN KEY (estado_id) REFERENCES estado (estado_id);

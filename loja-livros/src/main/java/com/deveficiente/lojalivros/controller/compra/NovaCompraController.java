@@ -1,34 +1,44 @@
 package com.deveficiente.lojalivros.controller.compra;
 
-import com.deveficiente.lojalivros.repository.PagamentoRepository;
+import com.deveficiente.lojalivros.controller.compra.requests.NovaCompraRequest;
+import com.deveficiente.lojalivros.controller.compra.responses.NovaCompraResponse;
+import com.deveficiente.lojalivros.domain.Compra;
+import com.deveficiente.lojalivros.repository.CompraRepository;
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/pagamentos")
+@RequestMapping("/compras")
 @RequiredArgsConstructor
 public class NovaCompraController {
 
-  private final PagamentoRepository pagamentoRepository;
+  private final CompraRepository compraRepository;
   private final EntityManager entityManager;
   private final EstadoPertencePaisValidator estadoPertencePaisValidator;
 
+
+  //TODO SE O PAIS TEM ESTADO ENTAO O ESTADO DEVER SER INFORMADO
+  // CRIAR UMA VALIDACAO QUE CHECA SE O PAIS INFORMADO TEM QUALQUER ESTADO VICULADO,
+  // SE TIVER ENTAO O CAMPO ESTODO DEVER SER PREENCHIDO
+  @InitBinder
   public void init(WebDataBinder webDataBinder) {
     webDataBinder.addValidators(estadoPertencePaisValidator);
   }
 
   @PostMapping
-  public ResponseEntity<Void> cadastrar(@Valid @RequestBody NovaCompraRequest novaCompraRequest) {
-    pagamentoRepository.save(novaCompraRequest.of(entityManager));
+  public ResponseEntity<NovaCompraResponse> cadastrar(
+      @Valid @RequestBody NovaCompraRequest novaCompraRequest) {
+    Compra compra = compraRepository.save(novaCompraRequest.of(entityManager));
 
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok(NovaCompraResponse.of(compra));
   }
 
 }

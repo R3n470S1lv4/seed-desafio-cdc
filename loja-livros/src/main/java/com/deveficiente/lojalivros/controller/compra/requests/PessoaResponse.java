@@ -1,4 +1,4 @@
-package com.deveficiente.lojalivros.controller.compra;
+package com.deveficiente.lojalivros.controller.compra.requests;
 
 import lombok.Getter;
 

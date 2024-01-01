@@ -9,7 +9,6 @@ import lombok.Getter;
 
 @Embeddable
 @Getter
-@Builder
 public class Pessoa {
 
   private String nome;
@@ -26,6 +25,7 @@ public class Pessoa {
   private Pessoa() {
   }
 
+  @Builder
   public Pessoa(String nome, String sobreNome, Email email, Documento documento, Telefone telefone,
       Endereco endereco) {
     this.nome = requireNonNull(nome).nonBlank().take();
@@ -35,6 +35,5 @@ public class Pessoa {
     this.telefone = requireNonNull(telefone).take();
     this.endereco = requireNonNull(endereco).take();
   }
-
 
 }

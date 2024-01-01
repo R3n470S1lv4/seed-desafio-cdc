@@ -12,7 +12,6 @@ import lombok.Getter;
 public class Documento {
 
   private TipoDocumento tipoDocumento;
-  //TODO VALIDAR
   @Column(name = "documento")
   private String value;
 
@@ -24,7 +23,9 @@ public class Documento {
   }
 
   public Documento(TipoDocumento tipoDocumento, String value) {
-    this.tipoDocumento = requireNonNull(tipoDocumento).take();
+    this.tipoDocumento = requireNonNull(tipoDocumento)
+        .isTrue(tipoDocumento.isValid(value), "Numero de documento invalido.")
+        .take();
     this.value = requireNonNull(value).nonBlank().take();
   }
 }

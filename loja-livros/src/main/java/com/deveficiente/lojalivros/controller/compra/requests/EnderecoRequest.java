@@ -1,4 +1,4 @@
-package com.deveficiente.lojalivros.controller.compra;
+package com.deveficiente.lojalivros.controller.compra.requests;
 
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.isNoneBlank;

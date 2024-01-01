@@ -1,5 +1,6 @@
 package com.deveficiente.lojalivros.controller.compra;
 
+import com.deveficiente.lojalivros.controller.compra.requests.NovaCompraRequest;
 import com.deveficiente.lojalivros.domain.Estado;
 import com.deveficiente.lojalivros.domain.Pais;
 import javax.persistence.EntityManager;
@@ -23,11 +24,16 @@ public class EstadoPertencePaisValidator implements Validator {
   public void validate(Object target, Errors errors) {
     NovaCompraRequest novaCompraRequest = (NovaCompraRequest) target;
 
+    if (novaCompraRequest.hasNotEstado()) {
+      return;
+    }
+
     Pais pais = entityManager.find(Pais.class, novaCompraRequest.getPais());
     Estado estado = entityManager.find(Estado.class, novaCompraRequest.getEstado());
 
     if (estado.isNotOf(pais)) {
-      errors.reject("estadoId", null, "O Estado nao pertence ao Pais.");
+      errors.rejectValue("pessoa.endereco.estadoId", null,
+          "O Estado nao pertence ao Pais.");
     }
   }
 }
