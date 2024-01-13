@@ -23,6 +23,7 @@ public class NovaCompraController {
   private final CompraRepository compraRepository;
   private final EntityManager entityManager;
   private final EstadoPertencePaisValidator estadoPertencePaisValidator;
+  private final EstadoObrigatorioValidator estadoObrigatorioValidator;
 
 
   //TODO SE O PAIS TEM ESTADO ENTAO O ESTADO DEVER SER INFORMADO
@@ -31,6 +32,7 @@ public class NovaCompraController {
   @InitBinder
   public void init(WebDataBinder webDataBinder) {
     webDataBinder.addValidators(estadoPertencePaisValidator);
+    webDataBinder.addValidators(estadoObrigatorioValidator);
   }
 
   @PostMapping
