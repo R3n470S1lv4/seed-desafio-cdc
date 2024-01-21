@@ -1,6 +1,7 @@
 package com.deveficiente.lojalivros.controller.compra.requests;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 import com.deveficiente.lojalivros.domain.Compra;
 import javax.persistence.EntityManager;
@@ -17,9 +18,19 @@ public class NovaCompraRequest {
   @NotNull
   @Valid
   private NovoPedidoCompraRequest pedido;
+  @Valid
+  private CupomDescontoRequest cupom;
 
   public Compra of(EntityManager entityManager) {
-    return new Compra(pessoa.of(entityManager), pedido::of);
+    Compra compra = new Compra(pessoa.of(entityManager), pedido::of);
+    adicionarCupom(entityManager, compra);
+    return compra;
+  }
+
+  private void adicionarCupom(EntityManager entityManager, Compra compra) {
+    if (nonNull(cupom)) {
+      compra.adicionarCupom(cupom.of(entityManager));
+    }
   }
 
   public String getPaisId() {

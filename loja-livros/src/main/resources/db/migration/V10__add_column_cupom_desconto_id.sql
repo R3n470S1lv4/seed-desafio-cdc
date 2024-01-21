@@ -1,0 +1,2 @@
+ALTER TABLE compra ADD cupom_desconto_codigo VARCHAR(255);
+ALTER TABLE compra ADD CONSTRAINT fk_compra_cupom_desconto FOREIGN KEY (cupom_desconto_codigo) REFERENCES cupom_desconto (cupom_desconto_codigo);

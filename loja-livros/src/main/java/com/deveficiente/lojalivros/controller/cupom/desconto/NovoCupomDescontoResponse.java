@@ -12,14 +12,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public class NovoCupomDescontoResponse {
 
-  private final String id;
   private final String codigo;
   private final BigDecimal percentual;
   private final LocalDate validade;
 
   public static NovoCupomDescontoResponse of(CupomDesconto cupomDesconto) {
     return NovoCupomDescontoResponse.builder()
-        .id(cupomDesconto.getId())
         .codigo(cupomDesconto.getCodigo())
         .percentual(cupomDesconto.getPercentual())
         .validade(cupomDesconto.getValidade())

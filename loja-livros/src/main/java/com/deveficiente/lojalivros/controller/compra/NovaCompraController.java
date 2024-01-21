@@ -26,9 +26,7 @@ public class NovaCompraController {
   private final EstadoObrigatorioValidator estadoObrigatorioValidator;
 
 
-  //TODO SE O PAIS TEM ESTADO ENTAO O ESTADO DEVER SER INFORMADO
-  // CRIAR UMA VALIDACAO QUE CHECA SE O PAIS INFORMADO TEM QUALQUER ESTADO VICULADO,
-  // SE TIVER ENTAO O CAMPO ESTODO DEVER SER PREENCHIDO
+  //TODO VALIDAR CUPOM PELA DA DE VALIDADE
   @InitBinder
   public void init(WebDataBinder webDataBinder) {
     webDataBinder.addValidators(estadoPertencePaisValidator);

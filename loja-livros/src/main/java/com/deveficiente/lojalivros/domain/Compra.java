@@ -10,14 +10,15 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Entity
 @Getter
-@AllArgsConstructor
+//@AllArgsConstructor
 public class Compra {
 
   @Id
@@ -27,6 +28,9 @@ public class Compra {
   private Pessoa pessoa;
   @OneToOne(mappedBy = "compra", cascade = CascadeType.ALL)
   private PedidoCompra pedidoCompra;
+  @ManyToOne
+  @JoinColumn(name = "cupom_desconto_codigo")
+  private CupomDesconto cupomDesconto;
 
   /**
    * @deprecated Nao use esse construtor, ele so existe por causa do ORM
@@ -40,6 +44,16 @@ public class Compra {
     this.id = randomUUID().toString();
     this.pessoa = requireNonNull(pessoa).take();
     this.pedidoCompra = requireNonNull(pedidoCompra.apply(this)).take();
+  }
+
+  public void adicionarCupom(CupomDesconto cupomDesconto) {
+    requireNonNull(this.id,
+        "O cupom nao pode ser adicionada a uma compra ja registrada.").nonBlank();
+
+    requireNonNull(cupomDesconto).take()
+        .isValido();
+
+    this.cupomDesconto = cupomDesconto;
   }
 
 }
